@@ -1,0 +1,622 @@
+<title>I Cerchi dell'Inferno — Demo di layout</title>
+<style>
+  :root{
+    --bg-top: #e9dfc4;
+    --bg-mid: #dcc79c;
+    --bg-bottom: #caa878;
+    --ink: #2b2118;
+    --ink-soft: #4a3c2c;
+    --ember: #8a2c1f;
+    --gold: #93701f;
+    --line: #b8a074;
+    --card-bg: #f4ead4;
+    --card-bg-solid: #f4ead4;
+    --card-border: #c9b48b;
+    --hero-veil: rgba(43,33,24,0.06);
+    --shadow: rgba(43,33,24,0.18);
+    --scrim: rgba(20,14,8,0.72);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-top: #201a2e;
+      --bg-mid: #33221f;
+      --bg-bottom: #180a08;
+      --ink: #ecdfc5;
+      --ink-soft: #cbb99e;
+      --ember: #e2664c;
+      --gold: #d9ad5c;
+      --line: #6b5636;
+      --card-bg: #241a15;
+      --card-bg-solid: #241a15;
+      --card-border: #4a382a;
+      --hero-veil: rgba(0,0,0,0.25);
+      --shadow: rgba(0,0,0,0.55);
+      --scrim: rgba(8,5,3,0.82);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-top: #201a2e;
+    --bg-mid: #33221f;
+    --bg-bottom: #180a08;
+    --ink: #ecdfc5;
+    --ink-soft: #cbb99e;
+    --ember: #e2664c;
+    --gold: #d9ad5c;
+    --line: #6b5636;
+    --card-bg: #241a15;
+    --card-bg-solid: #241a15;
+    --card-border: #4a382a;
+    --hero-veil: rgba(0,0,0,0.25);
+    --shadow: rgba(0,0,0,0.55);
+    --scrim: rgba(8,5,3,0.82);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ -webkit-text-size-adjust: 100%; }
+
+  body{
+    margin: 0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, var(--hero-veil), transparent 60%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bottom) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    line-height: 1.6;
+  }
+
+  .label, .tag, .datefig, .meta-mono{
+    font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  h1, h2, h3, h4{
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    text-wrap: balance;
+    font-weight: 600;
+  }
+
+  a{ color: inherit; }
+
+  /* ---------- Nota demo ---------- */
+  .demo-banner{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0.9rem 1.75rem 0;
+    text-align: center;
+  }
+  .demo-banner span{
+    display: inline-block;
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ember);
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 1.75rem 4rem;
+    text-align: center;
+  }
+  .hero .eyebrow{
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1.4rem;
+    opacity: 0.9;
+  }
+  .hero h1{
+    font-size: clamp(2.2rem, 5vw, 3.3rem);
+    margin: 0 0 1.1rem;
+    letter-spacing: 0.01em;
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--ember);
+  }
+  .hero p{
+    max-width: 56ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+  .hero .verse{
+    margin-top: 2.2rem;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    opacity: 0.85;
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline{
+    position: relative;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 8rem;
+  }
+
+  .spine{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, var(--gold) 0%, var(--ember) 100%);
+    opacity: 0.55;
+  }
+  .spine::before, .spine::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    transform: translateX(-50%) rotate(45deg);
+    background: var(--gold);
+  }
+  .spine::before{ top: -4px; }
+  .spine::after{ bottom: -4px; background: var(--ember); }
+
+  .node{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 46px 1fr;
+    align-items: start;
+    gap: 0 1.6rem;
+    margin: 0 0 3.4rem;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .node.visible{ opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .node{ opacity: 1; transform: none; transition: none; }
+  }
+
+  .node .marker{
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .marker button{
+    all: unset;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg-solid);
+    border: 2px solid var(--accent, var(--gold));
+    color: var(--accent, var(--gold));
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 0 6px var(--bg-mid), 0 6px 18px var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .marker button::before{
+    content: "";
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent, var(--ember)) 0%, transparent 70%);
+    opacity: 0.35;
+    z-index: -1;
+  }
+  .marker button:hover, .marker button:focus-visible{
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px var(--bg-mid), 0 8px 22px var(--shadow);
+  }
+  .marker button:focus-visible{ outline: 2px solid var(--ember); outline-offset: 4px; }
+
+  .card{
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    max-width: 420px;
+  }
+  .node:nth-child(even) .card{
+    grid-column: 3;
+    justify-self: start;
+    text-align: left;
+  }
+  .node:nth-child(even) .filler{ grid-column: 1; }
+  .node:nth-child(odd) .filler{ grid-column: 3; }
+
+  .card button.cardhit{
+    all: unset;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 1.15rem 1.3rem;
+    box-shadow: 0 4px 14px var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .card button.cardhit:hover, .card button.cardhit:focus-visible{
+    transform: translateY(-2px);
+    border-color: var(--accent, var(--ember));
+    box-shadow: 0 10px 22px var(--shadow);
+  }
+  .card button.cardhit:focus-visible{ outline: 2px solid var(--ember); outline-offset: 3px; }
+
+  .card .period{
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent, var(--ember));
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .card .circle{
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 0.55rem;
+  }
+  .card h3{
+    margin: 0 0 0.4rem;
+    font-size: 1.28rem;
+    color: var(--ink);
+  }
+  .card h3 .num{
+    color: var(--accent, var(--gold));
+    font-style: italic;
+    margin-right: 0.4em;
+  }
+  .card .hook{
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .card .open-hint{
+    display: inline-block;
+    margin-top: 0.7rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent, var(--ember));
+    opacity: 0.85;
+  }
+
+  @media (max-width: 720px){
+    .spine{ left: 22px; }
+    .node{
+      grid-template-columns: 44px 1fr;
+      gap: 0 1rem;
+      margin-left: 0;
+    }
+    .node .marker{ grid-column: 1; }
+    .node .card, .node:nth-child(even) .card{
+      grid-column: 2;
+      justify-self: stretch;
+      text-align: left;
+      max-width: none;
+    }
+    .filler{ display: none; }
+  }
+
+  /* ---------- Footer ---------- */
+  .foot{
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 1.75rem 5rem;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: var(--scrim);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 4vh 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease;
+    z-index: 50;
+  }
+  .modal-overlay.open{ opacity: 1; visibility: visible; }
+
+  .modal{
+    background: var(--card-bg-solid);
+    color: var(--ink);
+    max-width: 700px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 4px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    padding: 2.4rem 2.4rem 2.8rem;
+    position: relative;
+    transform: translateY(14px);
+    transition: transform .25s ease;
+  }
+  .modal-overlay.open .modal{ transform: translateY(0); }
+
+  .modal-close{
+    all: unset;
+    cursor: pointer;
+    position: sticky;
+    float: right;
+    top: 0;
+    margin-left: 1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-mid);
+    color: var(--ink);
+    font-size: 1.1rem;
+    line-height: 1;
+    border: 1px solid var(--card-border);
+  }
+  .modal-close:hover, .modal-close:focus-visible{ color: var(--ember); }
+  .modal-close:focus-visible{ outline: 2px solid var(--ember); outline-offset: 2px; }
+
+  .modal-head{ margin-bottom: 1.6rem; }
+  .modal-head .period{
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--modal-accent, var(--ember));
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .modal-head .circle{
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 0.7rem;
+  }
+  .modal-head h2{
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
+  .modal-head h2 .num{
+    color: var(--modal-accent, var(--gold));
+    font-style: italic;
+    margin-right: 0.35em;
+  }
+  .modal-head hr{
+    border: none;
+    border-top: 1px solid var(--card-border);
+    margin-top: 1.4rem;
+  }
+
+  .summary-content h4{
+    font-size: 1.02rem;
+    color: var(--modal-accent, var(--ember));
+    margin: 1.7rem 0 0.55rem;
+    letter-spacing: 0.01em;
+  }
+  .summary-content h4:first-child{ margin-top: 0; }
+  .summary-content p{
+    margin: 0 0 0.9rem;
+    max-width: 66ch;
+    font-size: 1rem;
+  }
+  .summary-content ul{
+    margin: 0 0 1rem;
+    padding-left: 1.2rem;
+  }
+  .summary-content li{ margin-bottom: 0.45rem; }
+  .summary-content .closing{
+    margin-top: 1.3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--card-border);
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .summary-content strong{ color: var(--ink); }
+
+  body.modal-locked{ overflow: hidden; }
+</style>
+
+<div class="demo-banner"><span>Demo di layout &middot; 2 canti su 12</span></div>
+
+<div class="hero">
+  <span class="eyebrow">Inferno &middot; Canti I&ndash;II</span>
+  <h1>I Cerchi dell'<em>Inferno</em></h1>
+  <p>Modello di layout estratto dalla linea del tempo completa: la stessa spina dorsale, le stesse schede e la stessa finestra di riassunto, qui limitate a due canti a titolo dimostrativo.</p>
+  <p class="verse">&laquo;Nel mezzo del cammin di nostra vita&nbsp;/ mi ritrovai per una selva oscura&hellip;&raquo;</p>
+</div>
+
+<div class="timeline">
+  <div class="spine" aria-hidden="true"></div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-1">
+        <span class="period">Notte tra il 7 e l'8 aprile 1300</span>
+        <span class="circle">Fuori dai cerchi &middot; la selva e il colle</span>
+        <h3><span class="num">I</span>La selva oscura</h3>
+        <p class="hook">Smarrito a metà del cammino della vita, Dante è respinto da tre fiere verso il buio, finché non appare Virgilio a promettergli un'altra via.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-1" aria-label="Apri il riassunto del Canto I"><span aria-hidden="true">I</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c08f42">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-2" aria-label="Apri il riassunto del Canto II"><span aria-hidden="true">II</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-2">
+        <span class="period">Sera dell'8 aprile 1300, al crepuscolo</span>
+        <span class="circle">Preludio &middot; soglia dell'Inferno</span>
+        <h3><span class="num">II</span>Le tre donne benedette</h3>
+        <p class="hook">Il coraggio di Dante vacilla, ma Virgilio rivela la catena di soccorso mossa dal cielo &mdash; Maria, Lucia, Beatrice &mdash; e lo spinge a ripartire.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<p class="foot">Estratto dimostrativo del layout &mdash; versione completa: 12 canti, stessa struttura.</p>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Chiudi">&times;</button>
+    <div class="modal-head">
+      <span class="period" id="modalPeriod"></span>
+      <span class="circle" id="modalCircle"></span>
+      <h2 id="modalTitle"></h2>
+      <hr>
+    </div>
+    <div class="summary-content" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ===================== TEMPLATES ===================== -->
+
+<template id="canto-1">
+  <h4>1. La selva oscura</h4>
+  <p>Nella notte tra il 7 e l'8 aprile del 1300 (secondo altri il 24-25 marzo), <strong>Dante</strong>, trentacinquenne e ormai "a metà del cammino della vita", si ritrova smarrito in una foresta oscura, fitta e selvaggia. Non sa spiegare come vi sia entrato: era pieno di sonno quando ha abbandonato la via giusta, un torpore della coscienza che, secondo le Scritture, apre la porta al peccato. La selva è amara quasi quanto la morte, e il solo ricordo gli fa tornare la paura. Sul piano allegorico, quel bosco oscuro rappresenta il peccato in cui l'uomo può perdersi.</p>
+
+  <h4>2. L'alba, il colle e le tre fiere</h4>
+  <p>Dante giunge ai piedi di un colle e alza lo sguardo: la cima è già illuminata dai raggi del sole nascente, che sale insieme alla costellazione dell'Ariete, la stessa dei giorni della Creazione. È l'alba di primavera, un momento di buon auspicio, e la luce placa un poco la sua paura; si volta a guardare il buio da cui è uscito come un naufrago che fissa il mare in tempesta. Ma appena inizia la salita, tre animali gli sbarrano il cammino:</p>
+  <ul>
+    <li>La <strong>lonza</strong>, felino agile e maculato, gli resta davanti al volto: rappresenta la lussuria.</li>
+    <li>Il <strong>leone</strong>, che avanza a testa alta con fame rabbiosa: rappresenta la superbia.</li>
+    <li>La <strong>lupa</strong>, magrissima eppure carica di ogni bramosia, che ha già reso miserabili molte persone: rappresenta l'avarizia e la cupidigia, per Dante la radice di tutti i mali.</li>
+  </ul>
+  <p>È proprio la lupa, la più pericolosa, a togliergli ogni speranza e a respingerlo verso il basso, là dove "il sole tace" e non arrivano più i suoi raggi.</p>
+
+  <h4>3. L'incontro con Virgilio</h4>
+  <p>Mentre scivola di nuovo verso l'oscurità, a Dante appare una figura indistinta, dalla voce quasi "fioca". Spaventato, la implora: «Miserere di me, chiunque tu sia, ombra o uomo vero!». La figura risponde presentandosi per indizi &mdash; genitori mantovani, la nascita al tempo di Cesare, la vita a Roma sotto Augusto, il poema sul "giusto figlio di Anchise" fuggito da Troia in fiamme &mdash; finché è lo stesso Dante a riconoscerlo: è <strong>Virgilio</strong>, autore dell'<em>Eneide</em>. Virgilio rimprovera Dante di tornare verso il dolore invece di salire il dilettoso monte, mentre Dante, arrossendo, lo travolge di ammirazione, chiamandolo suo maestro e fonte del "bello stilo". Poi gli indica la lupa e lo supplica di aiutarlo contro di lei, che gli fa tremare le vene e i polsi.</p>
+
+  <h4>4. La profezia del veltro e l'annuncio del viaggio</h4>
+  <p>Virgilio spiega che per salvarsi Dante dovrà "tenere un altro viaggio", perché la lupa è una bestia insaziabile che uccide chi le sbarra la strada. Annuncia poi la celebre profezia del <strong>veltro</strong>, un cane da caccia che un giorno ucciderà la lupa: non sarà avido di ricchezze ma si nutrirà di sapienza, amore e virtù, e nascerà "tra feltro e feltro". Sarà la salvezza dell'Italia umiliata, per la quale morirono personaggi dell'<em>Eneide</em>:</p>
+  <ul>
+    <li><strong>Camilla</strong>, regina dei Volsci;</li>
+    <li><strong>Eurialo</strong> e <strong>Niso</strong>, giovani guerrieri troiani;</li>
+    <li><strong>Turno</strong>, re dei Rutuli e nemico di Enea.</li>
+  </ul>
+  <p>Virgilio si offre poi come guida attraverso il luogo eterno: prima l'Inferno, con le grida dei dannati che invocano la "seconda morte", poi il Purgatorio, con le anime che soffrono ma sperano. Pone però un limite: fino al Paradiso non potrà accompagnarlo, perché, vissuto prima del Cristianesimo, fu "ribelle" alla legge di quell'imperatore che regna lassù; a guidarlo sarà allora un'anima più degna. Sul piano allegorico Virgilio incarna la ragione umana, capace di condurre alla virtù ma non alla salvezza, per la quale servirà la grazia divina (Beatrice). Dante non esita, lo chiama «Poeta» e lo prega di guidarlo: il canto si chiude con Virgilio che si mette in cammino e Dante che lo segue.</p>
+
+  <p class="closing">Il Canto I fa da soglia all'intero poema, intrecciando il piano reale &mdash; l'uomo smarrito nella primavera del 1300 &mdash; con quello allegorico del cammino che ogni uomo deve compiere per liberarsi dal peccato, e inaugura il legame quasi paterno tra Virgilio e Dante che si approfondirà nei canti successivi.</p>
+</template>
+
+<template id="canto-2">
+  <h4>1. Il crepuscolo e l'invocazione alle Muse</h4>
+  <p>È la sera di <strong>venerdì 8 aprile</strong> del 1300 (secondo un'altra tradizione il 25 marzo): il cielo si fa scuro e tutti gli animali si ritirano a riposare, mentre <strong>Dante</strong>, unico a restare desto, si prepara accanto a <strong>Virgilio</strong> ad affrontare il cammino "pieno di guerra" verso la porta dell'Inferno. Prima di raccontare, Dante si rivolge alle <strong>Muse</strong>, invocandole come ispiratrici e chiedendo il loro sostegno per narrare con verità ciò che ha visto. È una pausa solenne, quasi una promessa al lettore, in cui si misurerà la nobiltà del suo ingegno.</p>
+
+  <h4>2. Il dubbio di Dante e l'accusa di viltà</h4>
+  <p>Mentre il buio avanza, il coraggio di Dante vacilla e chiede a Virgilio di verificare se la sua forza sia davvero sufficiente all'impresa. Per esprimere il proprio tormento porta due esempi di uomini scesi nell'aldilà con un disegno più grande alle spalle:</p>
+  <ul>
+    <li><strong>Enea</strong>, disceso vivo nel regno dei morti, scelto dal cielo per fondare Roma e il suo impero, futura sede del papato.</li>
+    <li><strong>San Paolo</strong>, rapito fino al terzo cielo per rafforzare con la sua testimonianza la fede cristiana.</li>
+  </ul>
+  <p>Dante si chiede allora con angoscia chi sia lui, che non è né Enea né Paolo, e teme che il viaggio sia una follia non autorizzata dal cielo; così, come chi cambia idea all'improvviso, rinuncia all'impresa appena accettata. Virgilio non usa mezzi termini: la sua anima è colpita da <strong>viltà</strong>, quella paura infondata che trattiene l'uomo dalle imprese onorevoli, e per liberarlo decide di raccontargli perché è venuto ad aiutarlo, aprendo un lungo flashback.</p>
+
+  <h4>3. Il racconto di Virgilio: Beatrice e le tre donne benedette</h4>
+  <p>Virgilio narra che si trovava nel <strong>Limbo</strong> quando gli è apparsa una donna bella e beata, con occhi splendenti più di una stella: era <strong>Beatrice</strong>, la donna amata da Dante in vita e ora beata in Paradiso. Lei gli ha chiesto, per amore disinteressato, di soccorrere Dante bloccato sul pendio deserto, affidandogli la sua parola elegante perché lo aiuti a salvarsi. Alla domanda di Virgilio su come mai lei, beata, non tema di scendere all'Inferno, Beatrice risponde che si deve temere solo ciò che può fare del male, e nulla in quel luogo può nuocerle. Poi svela la catena di soccorso che l'ha spinta a muoversi:</p>
+  <ul>
+    <li>La <strong>Vergine Maria</strong>, commossa per il pericolo di Dante nella selva, ha voluto intervenire.</li>
+    <li><strong>Santa Lucia</strong>, "nemica di ogni crudeltà" e protettrice della vista, incaricata da Maria, si è recata da Beatrice.</li>
+    <li>Lucia, trovando Beatrice accanto a <strong>Rachele</strong> (simbolo della vita contemplativa), l'ha esortata a soccorrere colui che tanto l'amò, descrivendo Dante come travolto dalla "fiumana" del peccato dove il mare non ha potere.</li>
+  </ul>
+  <p>A quelle parole Beatrice è scesa immediatamente dal suo scanno beato, e con gli occhi lucenti di lacrime ha spinto Virgilio a muoversi in fretta: è così che egli è arrivato in tempo per allontanare Dante dalla lupa.</p>
+
+  <h4>4. L'esortazione finale e la ripartenza</h4>
+  <p>Chiuso il flashback, Virgilio incalza Dante con domande martellanti: perché tanta viltà, se addirittura tre donne benedette &mdash; Maria, Lucia e Beatrice &mdash; si prendono cura di lui nella corte del cielo? L'effetto è immediato: come fiori chiusi dal gelo notturno che si aprono al sole del mattino (un'immagine qui rovesciata, perché è sera), Dante ritrova energia e coraggio. Commosso, esclama la sua gratitudine verso Beatrice e Virgilio, dichiara di essere tornato al proposito iniziale e lo prega di guidarlo, chiamandolo sua guida, signore e maestro. Non appena Virgilio riparte, Dante lo segue sul sentiero "alto e selvaggio", primo passo concreto verso la porta dell'Inferno.</p>
+
+  <p class="closing">Pur essendo il secondo canto, questo è il primo vero canto della narrazione (il primo era un prologo all'intera opera), e per questo si apre con l'invocazione alle Muse. Il suo cuore è allegorico: Beatrice incarna la grazia divina e la teologia rivelata, Virgilio la ragione umana, preziosa ma non sufficiente da sola; e la catena delle tre donne del cielo dimostra che il viaggio di Dante non è una follia, ma un percorso voluto e sorvegliato dall'alto fin dal principio.</p>
+</template>
+
+<script>
+(function(){
+  var CANTI = {
+    "canto-1":  { num: "I",  title: "La selva oscura",       period: "Notte tra il 7 e l'8 aprile 1300", circle: "Fuori dai cerchi · la selva e il colle", accent: "#c99a46" },
+    "canto-2":  { num: "II", title: "Le tre donne benedette", period: "Sera dell'8 aprile 1300, al crepuscolo", circle: "Preludio · soglia dell'Inferno", accent: "#c08f42" }
+  };
+
+  var overlay = document.getElementById("modalOverlay");
+  var modalBody = document.getElementById("modalBody");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalPeriod = document.getElementById("modalPeriod");
+  var modalCircle = document.getElementById("modalCircle");
+  var modalEl = overlay.querySelector(".modal");
+  var lastFocused = null;
+
+  function openCanto(id){
+    var data = CANTI[id];
+    var tpl = document.getElementById(id);
+    if(!data || !tpl) return;
+    lastFocused = document.activeElement;
+    modalTitle.innerHTML = '<span class="num">' + data.num + '</span>' + data.title;
+    modalPeriod.textContent = data.period;
+    modalCircle.textContent = data.circle;
+    modalEl.style.setProperty("--modal-accent", data.accent);
+    modalBody.innerHTML = "";
+    modalBody.appendChild(tpl.content.cloneNode(true));
+    overlay.classList.add("open");
+    document.body.classList.add("modal-locked");
+    modalEl.scrollTop = 0;
+    document.getElementById("modalClose").focus();
+  }
+
+  function closeModal(){
+    overlay.classList.remove("open");
+    document.body.classList.remove("modal-locked");
+    if(lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  document.querySelectorAll("[data-target]").forEach(function(el){
+    el.addEventListener("click", function(){ openCanto(el.getAttribute("data-target")); });
+  });
+
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+  overlay.addEventListener("click", function(e){ if(e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+  });
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var nodes = document.querySelectorAll(".node");
+  if(reduceMotion || !("IntersectionObserver" in window)){
+    nodes.forEach(function(n){ n.classList.add("visible"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("visible");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+    nodes.forEach(function(n){ io.observe(n); });
+  }
+})();
+</script>

@@ -1,0 +1,1089 @@
+<title>I Cerchi dell'Inferno</title>
+<style>
+  :root{
+    --bg-top: #e9dfc4;
+    --bg-mid: #dcc79c;
+    --bg-bottom: #caa878;
+    --ink: #2b2118;
+    --ink-soft: #4a3c2c;
+    --ember: #8a2c1f;
+    --gold: #93701f;
+    --line: #b8a074;
+    --card-bg: #f4ead4;
+    --card-bg-solid: #f4ead4;
+    --card-border: #c9b48b;
+    --hero-veil: rgba(43,33,24,0.06);
+    --shadow: rgba(43,33,24,0.18);
+    --scrim: rgba(20,14,8,0.72);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-top: #201a2e;
+      --bg-mid: #33221f;
+      --bg-bottom: #180a08;
+      --ink: #ecdfc5;
+      --ink-soft: #cbb99e;
+      --ember: #e2664c;
+      --gold: #d9ad5c;
+      --line: #6b5636;
+      --card-bg: #241a15;
+      --card-bg-solid: #241a15;
+      --card-border: #4a382a;
+      --hero-veil: rgba(0,0,0,0.25);
+      --shadow: rgba(0,0,0,0.55);
+      --scrim: rgba(8,5,3,0.82);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-top: #201a2e;
+    --bg-mid: #33221f;
+    --bg-bottom: #180a08;
+    --ink: #ecdfc5;
+    --ink-soft: #cbb99e;
+    --ember: #e2664c;
+    --gold: #d9ad5c;
+    --line: #6b5636;
+    --card-bg: #241a15;
+    --card-bg-solid: #241a15;
+    --card-border: #4a382a;
+    --hero-veil: rgba(0,0,0,0.25);
+    --shadow: rgba(0,0,0,0.55);
+    --scrim: rgba(8,5,3,0.82);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ -webkit-text-size-adjust: 100%; }
+
+  body{
+    margin: 0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, var(--hero-veil), transparent 60%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bottom) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    line-height: 1.6;
+  }
+
+  .label, .tag, .datefig, .meta-mono{
+    font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  h1, h2, h3, h4{
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    text-wrap: balance;
+    font-weight: 600;
+  }
+
+  a{ color: inherit; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 6.5rem 1.75rem 4rem;
+    text-align: center;
+  }
+  .hero .eyebrow{
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1.4rem;
+    opacity: 0.9;
+  }
+  .hero h1{
+    font-size: clamp(2.2rem, 5vw, 3.3rem);
+    margin: 0 0 1.1rem;
+    letter-spacing: 0.01em;
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--ember);
+  }
+  .hero p{
+    max-width: 56ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+  .hero .verse{
+    margin-top: 2.2rem;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    opacity: 0.85;
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline{
+    position: relative;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 8rem;
+  }
+
+  .spine{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, var(--gold) 0%, var(--ember) 100%);
+    opacity: 0.55;
+  }
+  .spine::before, .spine::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    transform: translateX(-50%) rotate(45deg);
+    background: var(--gold);
+  }
+  .spine::before{ top: -4px; }
+  .spine::after{ bottom: -4px; background: var(--ember); }
+
+  .node{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 46px 1fr;
+    align-items: start;
+    gap: 0 1.6rem;
+    margin: 0 0 3.4rem;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .node.visible{ opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .node{ opacity: 1; transform: none; transition: none; }
+  }
+
+  .node .marker{
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .marker button{
+    all: unset;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg-solid);
+    border: 2px solid var(--accent, var(--gold));
+    color: var(--accent, var(--gold));
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 0 6px var(--bg-mid), 0 6px 18px var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .marker button::before{
+    content: "";
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent, var(--ember)) 0%, transparent 70%);
+    opacity: 0.35;
+    z-index: -1;
+  }
+  .marker button:hover, .marker button:focus-visible{
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px var(--bg-mid), 0 8px 22px var(--shadow);
+  }
+  .marker button:focus-visible{ outline: 2px solid var(--ember); outline-offset: 4px; }
+
+  .card{
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    max-width: 420px;
+  }
+  .node:nth-child(even) .card{
+    grid-column: 3;
+    justify-self: start;
+    text-align: left;
+  }
+  .node:nth-child(even) .filler{ grid-column: 1; }
+  .node:nth-child(odd) .filler{ grid-column: 3; }
+
+  .card button.cardhit{
+    all: unset;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 1.15rem 1.3rem;
+    box-shadow: 0 4px 14px var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .card button.cardhit:hover, .card button.cardhit:focus-visible{
+    transform: translateY(-2px);
+    border-color: var(--accent, var(--ember));
+    box-shadow: 0 10px 22px var(--shadow);
+  }
+  .card button.cardhit:focus-visible{ outline: 2px solid var(--ember); outline-offset: 3px; }
+
+  .card .period{
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent, var(--ember));
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .card .circle{
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 0.55rem;
+  }
+  .card h3{
+    margin: 0 0 0.4rem;
+    font-size: 1.28rem;
+    color: var(--ink);
+  }
+  .card h3 .num{
+    color: var(--accent, var(--gold));
+    font-style: italic;
+    margin-right: 0.4em;
+  }
+  .card .hook{
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .card .open-hint{
+    display: inline-block;
+    margin-top: 0.7rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent, var(--ember));
+    opacity: 0.85;
+  }
+
+  @media (max-width: 720px){
+    .spine{ left: 22px; }
+    .node{
+      grid-template-columns: 44px 1fr;
+      gap: 0 1rem;
+      margin-left: 0;
+    }
+    .node .marker{ grid-column: 1; }
+    .node .card, .node:nth-child(even) .card{
+      grid-column: 2;
+      justify-self: stretch;
+      text-align: left;
+      max-width: none;
+    }
+    .filler{ display: none; }
+  }
+
+  /* ---------- Footer ---------- */
+  .foot{
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 1.75rem 5rem;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: var(--scrim);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 4vh 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease;
+    z-index: 50;
+  }
+  .modal-overlay.open{ opacity: 1; visibility: visible; }
+
+  .modal{
+    background: var(--card-bg-solid);
+    color: var(--ink);
+    max-width: 700px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 4px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    padding: 2.4rem 2.4rem 2.8rem;
+    position: relative;
+    transform: translateY(14px);
+    transition: transform .25s ease;
+  }
+  .modal-overlay.open .modal{ transform: translateY(0); }
+
+  .modal-close{
+    all: unset;
+    cursor: pointer;
+    position: sticky;
+    float: right;
+    top: 0;
+    margin-left: 1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-mid);
+    color: var(--ink);
+    font-size: 1.1rem;
+    line-height: 1;
+    border: 1px solid var(--card-border);
+  }
+  .modal-close:hover, .modal-close:focus-visible{ color: var(--ember); }
+  .modal-close:focus-visible{ outline: 2px solid var(--ember); outline-offset: 2px; }
+
+  .modal-head{ margin-bottom: 1.6rem; }
+  .modal-head .period{
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--modal-accent, var(--ember));
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .modal-head .circle{
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 0.7rem;
+  }
+  .modal-head h2{
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
+  .modal-head h2 .num{
+    color: var(--modal-accent, var(--gold));
+    font-style: italic;
+    margin-right: 0.35em;
+  }
+  .modal-head hr{
+    border: none;
+    border-top: 1px solid var(--card-border);
+    margin-top: 1.4rem;
+  }
+
+  .summary-content h4{
+    font-size: 1.02rem;
+    color: var(--modal-accent, var(--ember));
+    margin: 1.7rem 0 0.55rem;
+    letter-spacing: 0.01em;
+  }
+  .summary-content h4:first-child{ margin-top: 0; }
+  .summary-content p{
+    margin: 0 0 0.9rem;
+    max-width: 66ch;
+    font-size: 1rem;
+  }
+  .summary-content ul{
+    margin: 0 0 1rem;
+    padding-left: 1.2rem;
+  }
+  .summary-content li{ margin-bottom: 0.45rem; }
+  .summary-content .closing{
+    margin-top: 1.3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--card-border);
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .summary-content strong{ color: var(--ink); }
+
+  body.modal-locked{ overflow: hidden; }
+</style>
+
+<div class="hero">
+  <span class="eyebrow">Inferno &middot; Canti I&ndash;XV</span>
+  <h1>I Cerchi dell'<em>Inferno</em></h1>
+  <p>Una linea del tempo del viaggio di Dante, dalla selva oscura al girone dei sodomiti: quindici tappe lungo lo stesso Venerdì e Sabato Santo del 1300. Ogni punto è un canto: tocca un nodo per aprirne il riassunto.</p>
+  <p class="verse">&laquo;Nel mezzo del cammin di nostra vita&nbsp;/ mi ritrovai per una selva oscura&hellip;&raquo;</p>
+</div>
+
+<div class="timeline">
+  <div class="spine" aria-hidden="true"></div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-1">
+        <span class="period">Notte tra il 7 e l'8 aprile 1300</span>
+        <span class="circle">Fuori dai cerchi &middot; la selva e il colle</span>
+        <h3><span class="num">I</span>La selva oscura</h3>
+        <p class="hook">Smarrito a metà del cammino della vita, Dante è respinto da tre fiere verso il buio, finché non appare Virgilio a promettergli un'altra via.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-1" aria-label="Apri il riassunto del Canto I"><span aria-hidden="true">I</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-2" aria-label="Apri il riassunto del Canto II"><span aria-hidden="true">II</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-2">
+        <span class="period">Sera dell'8 aprile 1300, al crepuscolo</span>
+        <span class="circle">Preludio &middot; soglia dell'Inferno</span>
+        <h3><span class="num">II</span>Le tre donne benedette</h3>
+        <p class="hook">Il coraggio di Dante vacilla, ma Virgilio rivela la catena di soccorso mossa dal cielo &mdash; Maria, Lucia, Beatrice &mdash; e lo spinge a ripartire.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-3">
+        <span class="period">Sera dell'8 aprile 1300, Venerdì Santo</span>
+        <span class="circle">Antinferno &middot; Vestibolo degli Ignavi</span>
+        <h3><span class="num">III</span>La porta dell'Inferno</h3>
+        <p class="hook">«Lasciate ogne speranza»: oltre la soglia, gli ignavi inseguono un'insegna vuota e Caronte traghetta le anime dannate al di là dell'Acheronte.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-3" aria-label="Apri il riassunto del Canto III"><span aria-hidden="true">III</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-4" aria-label="Apri il riassunto del Canto IV"><span aria-hidden="true">IV</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-4">
+        <span class="period">Notte dell'8 aprile 1300, dopo lo svenimento</span>
+        <span class="circle">Cerchio I &middot; Limbo</span>
+        <h3><span class="num">IV</span>Il Limbo dei virtuosi</h3>
+        <p class="hook">Tra i sospiri di chi visse senza colpa ma senza fede, Dante siede accanto ai grandi poeti e filosofi dell'antichità, nel nobile castello dei sapienti.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-5">
+        <span class="period">Notte dell'8 aprile 1300</span>
+        <span class="circle">Cerchio II &middot; Lussuriosi</span>
+        <h3><span class="num">V</span>Paolo e Francesca</h3>
+        <p class="hook">Nella bufera che travolge i lussuriosi, Francesca racconta l'amore proibito per Paolo e il libro che fu loro "galeotto": Dante sviene di pietà.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-5" aria-label="Apri il riassunto del Canto V"><span aria-hidden="true">V</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-6" aria-label="Apri il riassunto del Canto VI"><span aria-hidden="true">VI</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-6">
+        <span class="period">Notte tra l'8 e il 9 aprile 1300</span>
+        <span class="circle">Cerchio III &middot; Golosi</span>
+        <h3><span class="num">VI</span>Cerbero e Ciacco</h3>
+        <p class="hook">Sotto una pioggia eterna, Cerbero è placato con manciate di fango; il fiorentino Ciacco profetizza a Dante le lotte future tra Bianchi e Neri.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-7">
+        <span class="period">Poco dopo la mezzanotte, 9 aprile 1300</span>
+        <span class="circle">Cerchio IV &rarr; V &middot; Avari/Prodighi, Iracondi/Accidiosi</span>
+        <h3><span class="num">VII</span>La ruota della Fortuna</h3>
+        <p class="hook">Pluto crolla davanti alla volontà divina; avari e prodighi si scontrano in eterno, mentre Virgilio spiega la Fortuna prima dello Stige fangoso.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-7" aria-label="Apri il riassunto del Canto VII"><span aria-hidden="true">VII</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-8" aria-label="Apri il riassunto del Canto VIII"><span aria-hidden="true">VIII</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-8">
+        <span class="period">Notte del 9 aprile 1300</span>
+        <span class="circle">Cerchio V &middot; Iracondi, sino alle mura di Dite</span>
+        <h3><span class="num">VIII</span>Le porte di Dite</h3>
+        <p class="hook">Flegiàs traghetta i due poeti oltre Filippo Argenti dilaniato dagli iracondi, ma sotto le mura roventi i diavoli sbarrano la strada a Virgilio.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-9">
+        <span class="period">Notte tra il 9 e il 10 aprile 1300</span>
+        <span class="circle">Cerchio VI &middot; ingresso a Dite, Eresiarchi</span>
+        <h3><span class="num">IX</span>Il messo del cielo</h3>
+        <p class="hook">Le Furie minacciano Medusa, ma un messo celeste attraversa lo Stige a piedi asciutti e apre le porte di Dite con una semplice verga.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-9" aria-label="Apri il riassunto del Canto IX"><span aria-hidden="true">IX</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-10" aria-label="Apri il riassunto del Canto X"><span aria-hidden="true">X</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-10">
+        <span class="period">Notte fonda, tra il 9 e il 10 aprile 1300</span>
+        <span class="circle">Cerchio VI &middot; Eresiarchi</span>
+        <h3><span class="num">X</span>Farinata e Cavalcante</h3>
+        <p class="hook">Dal sepolcro infuocato, Farinata sfida Dante da fiorentino a fiorentino e gli profetizza l'esilio, mentre Cavalcante crolla credendo morto il figlio Guido.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-11">
+        <span class="period">Verso le quattro del mattino, 9 aprile 1300</span>
+        <span class="circle">Soglia tra Cerchio VI e VII</span>
+        <h3><span class="num">XI</span>La mappa del male</h3>
+        <p class="hook">Riparati dal puzzo che sale dall'abisso, Virgilio disegna a Dante l'intera architettura morale dell'Inferno: incontinenza, violenza, frode.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-11" aria-label="Apri il riassunto del Canto XI"><span aria-hidden="true">XI</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-12" aria-label="Apri il riassunto del Canto XII"><span aria-hidden="true">XII</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-12">
+        <span class="period">Verso le quattro del mattino, 9 aprile 1300</span>
+        <span class="circle">Cerchio VII, girone 1 &middot; Violenti contro il prossimo</span>
+        <h3><span class="num">XII</span>Il fiume di sangue</h3>
+        <p class="hook">Il Minotauro infuria sulla frana, i centauri sorvegliano il Flegetonte bollente e Nesso guida i due poeti tra tiranni e assassini immersi nel sangue.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-13">
+        <span class="period">Alba di sabato 9 aprile 1300</span>
+        <span class="circle">Cerchio VII, girone 2 &middot; Violenti contro se stessi (suicidi e scialacquatori)</span>
+        <h3><span class="num">XIII</span>La selva dei suicidi</h3>
+        <p class="hook">Nella selva senza sentiero, popolata dalle Arpie, un ramo spezzato libera la voce di Pier della Vigna; poco dopo le cagne infernali sbranano gli scialacquatori in fuga.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-13" aria-label="Apri il riassunto del Canto XIII"><span aria-hidden="true">XIII</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="filler"></div>
+    <div class="marker"><button data-target="canto-14" aria-label="Apri il riassunto del Canto XIV"><span aria-hidden="true">XIV</span></button></div>
+    <div class="card">
+      <button class="cardhit" data-target="canto-14">
+        <span class="period">Mattina di sabato 9 aprile 1300</span>
+        <span class="circle">Cerchio VII, girone 3 &middot; Violenti contro Dio (bestemmiatori)</span>
+        <h3><span class="num">XIV</span>Capaneo e il Veglio di Creta</h3>
+        <p class="hook">Sul sabbione dove cade una pioggia di fuoco, Capaneo sfida ancora gli dèi; Virgilio rivela nel Veglio di Creta l'origine di tutti i fiumi dell'Inferno.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="node" style="--accent:#c99a46">
+    <div class="card">
+      <button class="cardhit" data-target="canto-15">
+        <span class="period">Mattina inoltrata di sabato 9 aprile 1300</span>
+        <span class="circle">Cerchio VII, girone 3 &middot; Violenti contro Dio (sodomiti)</span>
+        <h3><span class="num">XV</span>Brunetto Latini</h3>
+        <p class="hook">Lungo gli argini del Flegetonte, l'antico maestro Brunetto Latini riconosce Dante tra i sodomiti e gli profetizza l'esilio da Firenze.</p>
+        <span class="open-hint">Leggi il canto &rarr;</span>
+      </button>
+    </div>
+    <div class="marker"><button data-target="canto-15" aria-label="Apri il riassunto del Canto XV"><span aria-hidden="true">XV</span></button></div>
+    <div class="filler"></div>
+  </div>
+
+</div>
+
+<p class="foot">Riassunti tratti dai propri appunti di lettura sui primi quindici canti dell'<em>Inferno</em> &mdash; <em>Divina Commedia</em>, Dante Alighieri.</p>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Chiudi">&times;</button>
+    <div class="modal-head">
+      <span class="period" id="modalPeriod"></span>
+      <span class="circle" id="modalCircle"></span>
+      <h2 id="modalTitle"></h2>
+      <hr>
+    </div>
+    <div class="summary-content" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ===================== TEMPLATES ===================== -->
+
+<template id="canto-1">
+  <h4>1. La selva oscura</h4>
+  <p>Nella notte tra il 7 e l'8 aprile del 1300 (secondo altri il 24-25 marzo), <strong>Dante</strong>, trentacinquenne e ormai "a metà del cammino della vita", si ritrova smarrito in una foresta oscura, fitta e selvaggia. Non sa spiegare come vi sia entrato: era pieno di sonno quando ha abbandonato la via giusta, un torpore della coscienza che, secondo le Scritture, apre la porta al peccato. La selva è amara quasi quanto la morte, e il solo ricordo gli fa tornare la paura. Sul piano allegorico, quel bosco oscuro rappresenta il peccato in cui l'uomo può perdersi.</p>
+
+  <h4>2. L'alba, il colle e le tre fiere</h4>
+  <p>Dante giunge ai piedi di un colle e alza lo sguardo: la cima è già illuminata dai raggi del sole nascente, che sale insieme alla costellazione dell'Ariete, la stessa dei giorni della Creazione. È l'alba di primavera, un momento di buon auspicio, e la luce placa un poco la sua paura; si volta a guardare il buio da cui è uscito come un naufrago che fissa il mare in tempesta. Ma appena inizia la salita, tre animali gli sbarrano il cammino:</p>
+  <ul>
+    <li>La <strong>lonza</strong>, felino agile e maculato, gli resta davanti al volto: rappresenta la lussuria.</li>
+    <li>Il <strong>leone</strong>, che avanza a testa alta con fame rabbiosa: rappresenta la superbia.</li>
+    <li>La <strong>lupa</strong>, magrissima eppure carica di ogni bramosia, che ha già reso miserabili molte persone: rappresenta l'avarizia e la cupidigia, per Dante la radice di tutti i mali.</li>
+  </ul>
+  <p>È proprio la lupa, la più pericolosa, a togliergli ogni speranza e a respingerlo verso il basso, là dove "il sole tace" e non arrivano più i suoi raggi.</p>
+
+  <h4>3. L'incontro con Virgilio</h4>
+  <p>Mentre scivola di nuovo verso l'oscurità, a Dante appare una figura indistinta, dalla voce quasi "fioca". Spaventato, la implora: «Miserere di me, chiunque tu sia, ombra o uomo vero!». La figura risponde presentandosi per indizi &mdash; genitori mantovani, la nascita al tempo di Cesare, la vita a Roma sotto Augusto, il poema sul "giusto figlio di Anchise" fuggito da Troia in fiamme &mdash; finché è lo stesso Dante a riconoscerlo: è <strong>Virgilio</strong>, autore dell'<em>Eneide</em>. Virgilio rimprovera Dante di tornare verso il dolore invece di salire il dilettoso monte, mentre Dante, arrossendo, lo travolge di ammirazione, chiamandolo suo maestro e fonte del "bello stilo". Poi gli indica la lupa e lo supplica di aiutarlo contro di lei, che gli fa tremare le vene e i polsi.</p>
+
+  <h4>4. La profezia del veltro e l'annuncio del viaggio</h4>
+  <p>Virgilio spiega che per salvarsi Dante dovrà "tenere un altro viaggio", perché la lupa è una bestia insaziabile che uccide chi le sbarra la strada. Annuncia poi la celebre profezia del <strong>veltro</strong>, un cane da caccia che un giorno ucciderà la lupa: non sarà avido di ricchezze ma si nutrirà di sapienza, amore e virtù, e nascerà "tra feltro e feltro". Sarà la salvezza dell'Italia umiliata, per la quale morirono personaggi dell'<em>Eneide</em>:</p>
+  <ul>
+    <li><strong>Camilla</strong>, regina dei Volsci;</li>
+    <li><strong>Eurialo</strong> e <strong>Niso</strong>, giovani guerrieri troiani;</li>
+    <li><strong>Turno</strong>, re dei Rutuli e nemico di Enea.</li>
+  </ul>
+  <p>Virgilio si offre poi come guida attraverso il luogo eterno: prima l'Inferno, con le grida dei dannati che invocano la "seconda morte", poi il Purgatorio, con le anime che soffrono ma sperano. Pone però un limite: fino al Paradiso non potrà accompagnarlo, perché, vissuto prima del Cristianesimo, fu "ribelle" alla legge di quell'imperatore che regna lassù; a guidarlo sarà allora un'anima più degna. Sul piano allegorico Virgilio incarna la ragione umana, capace di condurre alla virtù ma non alla salvezza, per la quale servirà la grazia divina (Beatrice). Dante non esita, lo chiama «Poeta» e lo prega di guidarlo: il canto si chiude con Virgilio che si mette in cammino e Dante che lo segue.</p>
+
+  <p class="closing">Il Canto I fa da soglia all'intero poema, intrecciando il piano reale &mdash; l'uomo smarrito nella primavera del 1300 &mdash; con quello allegorico del cammino che ogni uomo deve compiere per liberarsi dal peccato, e inaugura il legame quasi paterno tra Virgilio e Dante che si approfondirà nei canti successivi.</p>
+</template>
+
+<template id="canto-2">
+  <h4>1. Il crepuscolo e l'invocazione alle Muse</h4>
+  <p>È la sera di <strong>venerdì 8 aprile</strong> del 1300 (secondo un'altra tradizione il 25 marzo): il cielo si fa scuro e tutti gli animali si ritirano a riposare, mentre <strong>Dante</strong>, unico a restare desto, si prepara accanto a <strong>Virgilio</strong> ad affrontare il cammino "pieno di guerra" verso la porta dell'Inferno. Prima di raccontare, Dante si rivolge alle <strong>Muse</strong>, invocandole come ispiratrici e chiedendo il loro sostegno per narrare con verità ciò che ha visto. È una pausa solenne, quasi una promessa al lettore, in cui si misurerà la nobiltà del suo ingegno.</p>
+
+  <h4>2. Il dubbio di Dante e l'accusa di viltà</h4>
+  <p>Mentre il buio avanza, il coraggio di Dante vacilla e chiede a Virgilio di verificare se la sua forza sia davvero sufficiente all'impresa. Per esprimere il proprio tormento porta due esempi di uomini scesi nell'aldilà con un disegno più grande alle spalle:</p>
+  <ul>
+    <li><strong>Enea</strong>, disceso vivo nel regno dei morti, scelto dal cielo per fondare Roma e il suo impero, futura sede del papato.</li>
+    <li><strong>San Paolo</strong>, rapito fino al terzo cielo per rafforzare con la sua testimonianza la fede cristiana.</li>
+  </ul>
+  <p>Dante si chiede allora con angoscia chi sia lui, che non è né Enea né Paolo, e teme che il viaggio sia una follia non autorizzata dal cielo; così, come chi cambia idea all'improvviso, rinuncia all'impresa appena accettata. Virgilio non usa mezzi termini: la sua anima è colpita da <strong>viltà</strong>, quella paura infondata che trattiene l'uomo dalle imprese onorevoli, e per liberarlo decide di raccontargli perché è venuto ad aiutarlo, aprendo un lungo flashback.</p>
+
+  <h4>3. Il racconto di Virgilio: Beatrice e le tre donne benedette</h4>
+  <p>Virgilio narra che si trovava nel <strong>Limbo</strong> quando gli è apparsa una donna bella e beata, con occhi splendenti più di una stella: era <strong>Beatrice</strong>, la donna amata da Dante in vita e ora beata in Paradiso. Lei gli ha chiesto, per amore disinteressato, di soccorrere Dante bloccato sul pendio deserto, affidandogli la sua parola elegante perché lo aiuti a salvarsi. Alla domanda di Virgilio su come mai lei, beata, non tema di scendere all'Inferno, Beatrice risponde che si deve temere solo ciò che può fare del male, e nulla in quel luogo può nuocerle. Poi svela la catena di soccorso che l'ha spinta a muoversi:</p>
+  <ul>
+    <li>La <strong>Vergine Maria</strong>, commossa per il pericolo di Dante nella selva, ha voluto intervenire.</li>
+    <li><strong>Santa Lucia</strong>, "nemica di ogni crudeltà" e protettrice della vista, incaricata da Maria, si è recata da Beatrice.</li>
+    <li>Lucia, trovando Beatrice accanto a <strong>Rachele</strong> (simbolo della vita contemplativa), l'ha esortata a soccorrere colui che tanto l'amò, descrivendo Dante come travolto dalla "fiumana" del peccato dove il mare non ha potere.</li>
+  </ul>
+  <p>A quelle parole Beatrice è scesa immediatamente dal suo scanno beato, e con gli occhi lucenti di lacrime ha spinto Virgilio a muoversi in fretta: è così che egli è arrivato in tempo per allontanare Dante dalla lupa.</p>
+
+  <h4>4. L'esortazione finale e la ripartenza</h4>
+  <p>Chiuso il flashback, Virgilio incalza Dante con domande martellanti: perché tanta viltà, se addirittura tre donne benedette &mdash; Maria, Lucia e Beatrice &mdash; si prendono cura di lui nella corte del cielo? L'effetto è immediato: come fiori chiusi dal gelo notturno che si aprono al sole del mattino (un'immagine qui rovesciata, perché è sera), Dante ritrova energia e coraggio. Commosso, esclama la sua gratitudine verso Beatrice e Virgilio, dichiara di essere tornato al proposito iniziale e lo prega di guidarlo, chiamandolo sua guida, signore e maestro. Non appena Virgilio riparte, Dante lo segue sul sentiero "alto e selvaggio", primo passo concreto verso la porta dell'Inferno.</p>
+
+  <p class="closing">Pur essendo il secondo canto, questo è il primo vero canto della narrazione (il primo era un prologo all'intera opera), e per questo si apre con l'invocazione alle Muse. Il suo cuore è allegorico: Beatrice incarna la grazia divina e la teologia rivelata, Virgilio la ragione umana, preziosa ma non sufficiente da sola; e la catena delle tre donne del cielo dimostra che il viaggio di Dante non è una follia, ma un percorso voluto e sorvegliato dall'alto fin dal principio.</p>
+</template>
+
+<template id="canto-3">
+  <h4>1. La porta dell'Inferno</h4>
+  <p>Nella sera del Venerdì Santo del 1300, <strong>Dante</strong> e <strong>Virgilio</strong> si fermano davanti a una porta immensa, sulla cui sommità è scolpita una scritta cupa che parla in prima persona, avvertendo chi entra che oltre quella soglia c'è la città del dolore, il dolore eterno e la gente perduta per sempre, e chiudendo con il celebre «Lasciate ogne speranza, voi che entrate». La scritta è densa di significato: l'Inferno nasce per <em>giustizia</em> e non per crudeltà, fu creato dalla Trinità (potenza del Padre, sapienza del Figlio, amore dello Spirito Santo), è antico quasi quanto la creazione e durerà in eterno. Dante, turbato, confessa la sua paura, ma Virgilio lo rincuora spiegando che qui devono morire ogni viltà e ogni esitazione; poi, con volto sereno, gli posa la mano sulla sua e lo conduce oltre la soglia, dentro le "cose segrete".</p>
+
+  <h4>2. Il Vestibolo e gli ignavi</h4>
+  <p>Varcata la porta, Dante si ritrova in un'aria senza stelle, buia in modo assoluto, dove esplodono da ogni parte sospiri, pianti e urla in lingue sconosciute, un tumulto che gira come sabbia in un turbine; sopraffatto, scoppia a piangere. Virgilio gli spiega che sono le anime di chi visse "senza infamia e senza lode", gli ignavi, mescolati agli angeli che durante la ribellione di Lucifero restarono neutrali: rifiutati sia dal Paradiso sia dall'Inferno profondo, restano sospesi in questo vestibolo. Virgilio ne parla con disprezzo:</p>
+  <ul>
+    <li>Questi non hanno speranza di morire una seconda volta, e la loro esistenza cieca è così misera da invidiare qualunque altra sorte.</li>
+    <li>Il mondo non ne conserva memoria, e misericordia e giustizia divina li disdegnano allo stesso modo.</li>
+  </ul>
+  <p>Dante li vede rincorrere in eterno un'insegna vuota che gira vorticosamente, condanna alla loro incapacità di seguire in vita una causa vera, e tra loro riconosce l'ombra di colui che "per viltade fece il gran rifiuto", tradizionalmente identificato con papa <strong>Celestino V</strong>, che rinunciò al pontificato aprendo la strada a Bonifacio VIII. La scena si chiude con il primo esempio di <strong>contrappasso</strong> del poema: gli ignavi, nudi, sono punti da mosconi e vespe che rigano di sangue i loro volti, sangue e lacrime che ai loro piedi diventano cibo per vermi ripugnanti &mdash; chi non si scaldò mai per una passione è ora tormentato da creature minuscole.</p>
+
+  <h4>3. Il fiume Acheronte e Caronte</h4>
+  <p>Oltre gli ignavi, Dante scorge una folla di anime radunate sulla riva di un grande fiume, l'<strong>Acheronte</strong>, che segna il confine vero dell'Inferno. Ecco apparire su una barca <strong>Caronte</strong>, il traghettatore dai capelli bianchi e dagli occhi cerchiati di fiamme, ripreso dalla mitologia classica ma reso più demoniaco: grida alle anime malvagie che non rivedranno mai il cielo, poi intima a Dante, unico vivo, di allontanarsi, accennando però che per lui è previsto un altro porto e un'imbarcazione più leggera (allusione alla sua futura salvezza). Virgilio zittisce il nocchiero con la formula del volere divino &mdash; «così è voluto là dove si può fare ciò che si vuole» &mdash; e Caronte tace. Le anime dannate, invece, reagiscono in modo opposto:</p>
+  <ul>
+    <li>Cambiano colore e battono i denti dal terrore.</li>
+    <li>Bestemmiano Dio, i genitori, la specie umana, il luogo e il momento della propria nascita.</li>
+  </ul>
+  <p>Come foglie che cadono in autunno una dopo l'altra, le anime si gettano dalla riva a ogni cenno di Caronte, mentre di continuo se ne accalca una nuova folla. Virgilio, chiamando Dante "figliuol mio", spiega che tutti coloro che muoiono nell'ira di Dio si radunano lì, spinti dalla giustizia divina a bramare il proprio castigo, e che da quella riva non passa mai un'anima buona: se Caronte si è lamentato, è perché Dante è destinato alla salvezza.</p>
+
+  <h4>4. Il terremoto e lo svenimento</h4>
+  <p>Appena Virgilio finisce di parlare, la pianura buia trema con violenza, si leva un vento fortissimo e balena una luce rossa come un lampo di sangue, che travolge ogni facoltà di Dante e lo fa crollare a terra privo di sensi, come colto dal sonno. Il canto si chiude sul buio dello svenimento, senza mostrare come Dante, che è vivo, attraversi l'Acheronte: un mistero lasciato in sospeso, con il protagonista destinato a risvegliarsi già dall'altra parte, nel Limbo, all'inizio del canto successivo.</p>
+</template>
+
+<template id="canto-4">
+  <h4>1. Il risveglio e la discesa nel cieco mondo</h4>
+  <p>Ancora nella notte del Venerdì Santo del 1300, un tuono violento strappa <strong>Dante</strong> al sonno in cui era caduto: il suo attraversamento dell'Acheronte è avvenuto mentre era svenuto, un vuoto nella memoria che lui stesso non sa spiegare. Risvegliatosi, si ritrova sull'orlo di una valle d'abisso da cui sale un rimbombo di infiniti lamenti, ma per quanto forzi lo sguardo verso il fondo, tutto è troppo oscuro e nebbioso per distinguere qualcosa. Accanto a lui <strong>Virgilio</strong> ha il volto pallidissimo, "tutto smorto", eppure lo invita con fermezza a scendere nel "cieco mondo", privo della luce di Dio. Dante si spaventa nel vedere la guida turbata, ma Virgilio lo corregge con dolcezza: non è paura, bensì pietà per le anime di quel luogo &mdash; a cui, come si scoprirà, egli stesso appartiene &mdash; e insieme scendono nel primo cerchio, il Limbo.</p>
+
+  <h4>2. Il Limbo e le sue anime</h4>
+  <p>Nel Limbo non ci sono urla né tormenti fisici, ma solo un coro sterminato di sospiri che fa tremare l'aria, un dolore tutto dell'anima sofferto da folle immense di uomini, donne e persino neonati. Virgilio spiega la condizione di queste anime prima ancora che Dante lo chieda:</p>
+  <ul>
+    <li>Non hanno peccato, ma a loro mancò il battesimo, porta della fede cristiana.</li>
+    <li>Alcuni vissero prima di Cristo e non poterono adorare Dio nel modo giusto &mdash; e in questi Virgilio include sé stesso.</li>
+  </ul>
+  <p>Per questi difetti, non per una colpa, sono perduti, e la loro unica pena è vivere nel desiderio di Dio senza speranza di raggiungerlo mai. Questo è il senso del Limbo (da <em>lembo</em>, orlo estremo della voragine): non il fuoco, ma la nostalgia infinita di un bene irraggiungibile. Dante si commuove riconoscendo che tra queste anime "sospese" vi sono persone di altissimo valore e bambini innocenti, tema che tormentò a lungo i teologi medievali.</p>
+
+  <h4>3. La discesa di Cristo agli Inferi</h4>
+  <p>Dante, con cautela e reverenza, chiede a Virgilio se qualcuno sia mai uscito dal Limbo per diventare beato: senza nominarlo, allude alla discesa di Cristo. Virgilio coglie il senso nascosto e racconta che, quando era da poco giunto lì, vide entrare un "possente" coronato dal segno della vittoria &mdash; Cristo, disceso trionfante dopo la Resurrezione per liberare le anime giuste vissute prima di Lui. Elenca allora i patriarchi che Cristo trasse fuori rendendoli beati:</p>
+  <ul>
+    <li>Adamo, Abele, Noè, Mosè, Abramo, Davide.</li>
+    <li>Israele (Giacobbe) con Isacco, i figli e Rachele, e molti altri.</li>
+  </ul>
+  <p>Virgilio precisa che prima di quei patriarchi nessuna anima umana era mai stata salvata: solo con Cristo si aprì la via alla salvezza, ed egli stesso assistette a quella liberazione, ma restò indietro, escluso.</p>
+
+  <h4>4. Il castello degli spiriti magni</h4>
+  <p>Proseguendo attraverso la fitta "selva di spiriti", Dante scorge una luce in lontananza che vince le tenebre: è la fama, la gloria terrena e la luce della ragione, che distingue alcune anime dalle altre &mdash; una luce che splende ma non salva. Una voce annuncia il ritorno dell'"altissimo poeta" Virgilio, e si avvicinano quattro grandi ombre solenni, i massimi poeti dell'antichità:</p>
+  <ul>
+    <li><strong>Omero</strong>, il "poeta sovrano", che avanza con una spada come loro signore.</li>
+    <li><strong>Orazio</strong> (poeta satirico), <strong>Ovidio</strong> (autore delle <em>Metamorfosi</em>) e <strong>Lucano</strong> (autore della <em>Farsaglia</em>).</li>
+  </ul>
+  <p>Questi accolgono Dante nella loro compagnia, ed egli diventa "il sesto tra tanto senno", collocandosi con orgoglio al fianco dei massimi classici &mdash; una dichiarazione della sua ambizione poetica. Insieme raggiungono un nobile castello cinto da sette mura e da un fiumicello, che attraversano passando per sette porte: elementi tradizionalmente letti come le virtù o le parti della filosofia (mura), le arti liberali (porte) e l'eloquenza o le passioni superate (fiume), a simboleggiare la nobiltà del sapere umano. Da un'altura luminosa si dispiega la rassegna degli "spiriti magni", i pagani virtuosi:</p>
+  <ul>
+    <li>Eroi e figure del mito e della storia: <strong>Elettra</strong> (madre di Dardano), Ettore, <strong>Enea</strong>, Cesare, le guerriere Camilla e Pentesilea, il re Latino con Lavinia, Lucio Giunio Bruto, e donne romane celebri come Lucrezia, Giulia, Marzia e Cornelia; in disparte il <strong>Saladino</strong>, estraneo al mondo classico ma ammirato per la sua magnanimità.</li>
+    <li>I filosofi e sapienti, guidati da <strong>Aristotele</strong>, "il maestro di color che sanno", con accanto Socrate e Platone, e poi Democrito, Diogene, Talete, Empedocle, Eraclito, Cicerone, Seneca, Euclide, Tolomeo, i medici Ippocrate, Avicenna e Galeno, e infine Averroè, autore del "gran comento" ad Aristotele.</li>
+  </ul>
+  <p class="closing">Il canto si chiude con la compagnia che si divide: Virgilio conduce Dante lontano dai grandi spiriti, uscendo dalla quiete luminosa del castello per rientrare nell'aria tremante del Limbo e ridiscendere verso il buio, avviandosi al cerchio successivo, dove attendono pene ben più aspre di quella silenziosa e dignitosa appena lasciata.</p>
+</template>
+
+<template id="canto-5">
+  <h4>Galeotto fu il libro e chi lo scrisse</h4>
+  <p>Ci troviamo nel <strong>secondo cerchio dell'Inferno</strong>, dove sono puniti i <strong>lussuriosi</strong>, trascinati da una bufera incessante, simbolo di un desiderio che non ha conosciuto misura. Qui Dante incontra due figure che restano sempre insieme: <strong>Francesca da Rimini</strong> e <strong>Paolo Malatesta</strong>. È Francesca a parlare, con tono dolce e ordinato, mentre Paolo resta accanto a lei in silenzio, piangendo. È nel rievocare l'origine del loro amore che Francesca pronuncia la celebre frase <em>"Galeotto fu il libro e chi lo scrisse"</em>.</p>
+
+  <h4>I personaggi</h4>
+  <p><strong>Francesca da Rimini</strong>, donna nobile cresciuta nei valori dell'amor cortese, racconta la propria colpa trasformandola in un racconto che chiede comprensione più che perdono. <strong>Paolo Malatesta</strong>, fratello del marito, non parla mai: la sua unica voce è il pianto. <strong>Gianciotto Malatesta</strong>, marito di Francesca e fratello di Paolo, non compare nella scena ma ne è la causa: scoperto il tradimento, uccise entrambi gli amanti.</p>
+
+  <h4>La storia</h4>
+  <p>Francesca, sposata a Gianciotto per un'unione politica tra famiglie, si innamora lentamente di Paolo, più vicino al suo stesso mondo cortese. Il momento decisivo arriva mentre i due leggono insieme, soli, il romanzo di Lancillotto e Ginevra: un altro amore proibito, costruito attorno al desiderio e alla trasgressione. Leggendo, i loro occhi si incontrano più volte e i volti cambiano colore, in un crescendo che assottiglia la distanza tra finzione e realtà. Quando nel libro Lancillotto bacia Ginevra, Paolo, vinto dall'emozione, bacia Francesca: da quel giorno, dice lei, "più non vi leggemmo avante". Scoperta la relazione, Gianciotto li uccide entrambi; dopo la morte, i due sono condannati insieme, per l'eternità, nella bufera dei lussuriosi.</p>
+
+  <h4>La scena nel canto</h4>
+  <p>Entrato nel secondo cerchio dopo il giudizio di Minosse, Dante osserva le anime travolte dal vento e nota due ombre che si muovono insieme, come se il vento non riuscisse a separarle. Le chiama a sé con pietà, ed esse si avvicinano "come colombe dal disio chiamate". Francesca parla con eleganza da amor cortese, insistendo sulla parola "Amor" come forza che trascina, prima di narrare la lettura del libro e il bacio, e chiudere con la celebre frase. Paolo piange in silenzio per tutto il racconto. Sopraffatto dalla pietà, Dante sviene, cadendo "come corpo morto cade".</p>
+
+  <h4>Il significato di "Galeotto"</h4>
+  <p>Il termine deriva da <strong>Galehaut</strong>, il personaggio delle leggende di Lancillotto che fa da tramite tra i due amanti: "galeotto" significa quindi mediatore d'amore, complice. Francesca, usando questa parola, sposta il peso della propria responsabilità: non dice "abbiamo deciso", ma "è successo per via del libro". È una frase costruita con precisione, che chiude il racconto senza bisogno di aggiungere altro.</p>
+
+  <h4>Interpretazione</h4>
+  <p>Francesca costruisce un racconto che tende a giustificare: non mente, ma seleziona i fatti per apparire meno responsabile, mettendo al centro la forza dell'amore e l'influenza del libro. Dante autore, però, non coincide con Francesca: il lettore prova pietà, ma non può dimenticare che i due sono dannati, e che la loro pena &mdash; la bufera che li trascina senza sosta &mdash; segna una passione disordinata, non l'amore in sé. Il libro, in questa lettura, non crea il desiderio ma lo fa emergere: è un'occasione, non la causa. È per questo equilibrio, tra la dolcezza del racconto e la fermezza del giudizio morale, che Dante, alla fine, sviene.</p>
+
+  <p class="closing">Francesca racconta per essere compresa; Dante mostra pietà, ma non assolve; il lettore resta sospeso tra emozione e giudizio. È questa ambiguità, mai risolta del tutto, a rendere l'episodio uno dei più memorabili di tutta la <em>Commedia</em>.</p>
+</template>
+
+<template id="canto-6">
+  <p>Siamo ancora nella notte del venerdì 8 aprile (25 marzo) dell'anno 1300. Dante si è appena risvegliato nel fango del terzo cerchio dopo lo svenimento accaduto nel canto precedente, dove il poeta si era commosso della storia dei due cognati Paolo e Francesca.</p>
+  <p>In questo cerchio sono puniti i <strong>golosi</strong>, i peccatori di gola, chi in vita visse soltanto per il piacere del cibo e del bere. Ora questi dannati si ritrovano affannati nel fango, distesi a terra, sepolti nella melma, urlano di dolore sotto una pioggia incessante, come cani bastonati.</p>
+  <p>Poi appare <strong>Cerbero</strong>, il mostro a tre teste, custode del cerchio e simbolo stesso della gola, che si scaglia ringhiando contro i due viandanti. Virgilio lo placa gettandogli manciate di terra nelle tre gole, calmandolo come un cane che smette di abbaiare quando ha qualcosa da mordere: la ragione doma la voracità.</p>
+  <p>Tra le ombre distese nel fango, una sola si tira su a sedere: è <strong>Ciacco</strong>, fiorentino noto per la gola, che riconosce Dante. Dopo essersi presentato e aver spiegato la propria colpa, Ciacco:</p>
+  <ul>
+    <li>profetizza le sanguinose lotte tra Guelfi Bianchi e Neri, la vittoria temporanea dei Bianchi e il successivo ritorno al potere dei Neri (con allusione all'esilio dello stesso Dante);</li>
+    <li>afferma che a Firenze ci sono solo "due giusti" inascoltati;</li>
+    <li>indica superbia, invidia e avarizia come cause della discordia cittadina;</li>
+    <li>rivela che altri fiorentini illustri (Farinata, Tegghiaio, Rusticucci, Mosca) sono dannati più in basso;</li>
+    <li>chiede a Dante di essere ricordato nel mondo dei vivi, poi ricade cieco nel fango.</li>
+  </ul>
+  <p>Camminando sui corpi inconsistenti delle ombre, Dante chiede a Virgilio se le pene infernali cambieranno dopo il Giudizio Universale. Virgilio, richiamando la dottrina aristotelico-tomista, spiega che dopo la resurrezione della carne i dannati saranno più "perfetti" e quindi soffriranno ancora di più.</p>
+  <p class="closing">Il canto si chiude mentre i due poeti scendono verso il cerchio successivo, dove li attende un nuovo mostro: Pluto.</p>
+</template>
+
+<template id="canto-7">
+  <p>È notte fonda. Siamo nelle prime ore del Sabato Santo, il 9 aprile dell'anno 1300 (per alcuni la mezzanotte tra il 25-26 marzo dello stesso anno). I due poeti stanno per varcare la soglia del quarto cerchio, dove sono puniti gli avari e i prodighi, coloro che in vita hanno peccato con il denaro.</p>
+
+  <h4>1. L'incontro con Pluto</h4>
+  <p>Sulla soglia del quarto Cerchio, <strong>Pluto</strong> &mdash; mostro con sembianze di lupo, guardiano di quella zona infernale &mdash; grida la minacciosa e oscura invocazione «Pape Satàn, pape Satàn aleppe!». Dante si spaventa, ma Virgilio lo zittisce ricordandogli che il loro viaggio è voluto dal Cielo, dove l'arcangelo Michele sconfisse la ribellione di Lucifero. A queste parole Pluto si affloscia a terra come una vela sgonfiata, privato di ogni potere.</p>
+
+  <h4>2. Il quarto Cerchio: avari e prodighi</h4>
+  <p>Scesi nella "trista ripa", i due poeti trovano una folla immensa divisa in due schiere che spingono massi lungo semicerchi opposti, scontrandosi e insultandosi a vicenda («Perché tieni?» / «Perché burli?»). Sono gli <strong>avari</strong> e i <strong>prodighi</strong>, puniti insieme per aver tradito la stessa virtù della misura nell'uso del denaro. Molti hanno la chierica: Virgilio rivela che tra loro ci sono anche papi e cardinali corrotti dall'avarizia. Sono tutti irriconoscibili, e Dante &mdash; unica volta in tutto l'Inferno per un Cerchio intero &mdash; non nomina nessun dannato.</p>
+
+  <h4>3. Il discorso sulla Fortuna</h4>
+  <p>Dante chiede spiegazioni su questa forza misteriosa che governa i beni terreni. Virgilio spiega che la Fortuna è un'intelligenza angelica creata da Dio per amministrare il passaggio di ricchezze, potere e gloria tra popoli e famiglie, secondo un disegno divino incomprensibile agli uomini. Non va né lodata né maledetta: è indifferente ai lamenti umani e serve solo Dio, facendo girare la sua ruota.</p>
+
+  <h4>4. Verso lo Stige: iracondi e accidiosi</h4>
+  <p>Attraversato il cerchio, i due scendono lungo un ruscello scuro fino alla palude dello <strong>Stige</strong>, dove sono puniti i peccatori dell'ira. È il quinto cerchio. Qui Dante vede:</p>
+  <ul>
+    <li>gli <strong>iracondi</strong>, immersi nel fango, che si percuotono e si dilaniano a vicenda in una furia senza fine;</li>
+    <li>gli <strong>accidiosi</strong> (iracondi "interiori"), sommersi sotto la superficie, che covarono la rabbia in silenzio in vita e ora possono solo gorgogliare un lamento soffocato: «Tristi fummo nell'aria dolce&hellip;».</li>
+  </ul>
+
+  <h4>5. L'arrivo alla torre</h4>
+  <p>Il canto si chiude in sospeso, senza una vera conclusione: i due poeti, costeggiando la palude, giungono ai piedi di una torre misteriosa, il cui segnale introdurrà il canto successivo e l'arrivo del demone Flegiàs.</p>
+  <p class="closing">In sintesi: Canto VII = IV cerchio (avari/prodighi) + inizio V cerchio (iracondi/accidiosi).</p>
+</template>
+
+<template id="canto-8">
+  <p>Siamo nella notte tra il Venerdì Santo e il Sabato Santo del 1300 (tra il 9 aprile e il 26 marzo, a seconda dei calcoli), ancora nel primo giorno del viaggio. Dante e <strong>Virgilio</strong> si trovano nel V cerchio, quello della palude Stigia, dove sono puniti gli <strong>iracondi</strong> e gli <strong>accidiosi</strong>. Il canto VIII non apre un nuovo cerchio, ma prosegue lo stesso episodio già iniziato alla fine del canto VII, sviluppandolo fino all'arrivo alle porte della città di Dite.</p>
+
+  <h4>1. Il segnale di fuoco delle torri</h4>
+  <p>Prima ancora di giungere ai piedi di un'alta torre sulla riva della palude Stigia, Dante e Virgilio notano accendersi in cima ad essa due fiamme, a cui risponde da lontanissimo un'altra fiamma identica: un misterioso sistema di segnalazione infernale che avverte dell'arrivo di nuovi viaggiatori, il cui significato resta volutamente in ombra.</p>
+
+  <h4>2. Flegiàs e la traversata dello Stige</h4>
+  <p>Sull'acqua morta sfreccia una piccola imbarcazione guidata da <strong>Flegiàs</strong>, demone-nocchiero che, scambiando Dante per un dannato, lo apostrofa con rabbia. Virgilio lo zittisce, e i due salgono sulla barca. Un dettaglio simbolico rilevante: l'imbarcazione si abbassa nell'acqua solo quando vi sale Dante, perché è vivo e ha un corpo reale, a differenza delle anime prive di peso. Flegiàs, nella mitologia, era un re che per vendetta incendiò il tempio di Apollo: un iracondo che ora sorveglia altri iracondi.</p>
+
+  <h4>3. Lo scontro con Filippo Argenti</h4>
+  <p>Durante la traversata emerge dal fango <strong>Filippo Argenti</strong>, fiorentino della famiglia degli Adimari, superbo e collerico, nemico politico di Dante. Al suo tentativo di scambio di battute, Dante risponde con durezza invece di provare pietà, come aveva fatto con Paolo e Francesca. Virgilio approva pienamente questo sdegno, respinge Filippo dalla barca e loda Dante per la sua giusta indignazione morale. Subito dopo Dante assiste, soddisfatto, allo spettacolo degli altri iracondi che fanno letteralmente a pezzi Filippo Argenti, mentre lui morde se stesso: il contrappasso della rabbia che si ritorce contro chi la prova.</p>
+
+  <h4>4. La città di Dite</h4>
+  <p>Mentre la barca si avvicina all'altra riva, un coro di grida dolorose annuncia l'arrivo alla città di <strong>Dite</strong> (altro nome di Lucifero), la fortezza che racchiude l'Inferno inferiore. Dante scorge torri rosse e incandescenti, paragonate a moschee ("meschite"). Virgilio conferma che il colore rosso deriva dal fuoco eterno che arde all'interno delle mura. Da qui in avanti si puniranno non più i peccati di debolezza, ma quelli di malvagità cosciente: eresia, violenza, frode, tradimento.</p>
+
+  <h4>5. Il muro dei diavoli e l'attesa del messo celeste</h4>
+  <p>Sopra le porte di Dite si affollano più di mille <strong>angeli ribelli</strong>, che si oppongono al passaggio e pretendono che Virgilio prosegua da solo mentre Dante torni indietro. Terrorizzato, Dante supplica la sua guida di non abbandonarlo; Virgilio lo rassicura e va a trattare con i demoni, che però gli sbattono le porte in faccia, lasciandolo fuori umiliato. Per confortare Dante, Virgilio ricorda che i diavoli tentarono invano di opporsi anche a Cristo durante la sua discesa agli Inferi, ed annuncia che un messaggero celeste sta già scendendo per aprire loro il passaggio.</p>
+
+  <p class="closing">Il canto si chiude in sospeso: un momento chiave in cui la sola ragione umana rappresentata da Virgilio si rivela insufficiente contro il male cosciente, e la risoluzione &mdash; con l'intervento della grazia divina &mdash; è rimandata al canto successivo. In sintesi: Canto VII = IV cerchio + inizio V cerchio; Canto VIII = continuazione V cerchio + arrivo alle porte di Dite; Canto IX = risoluzione e ingresso nel VI cerchio (eretici).</p>
+</template>
+
+<template id="canto-9">
+  <p>Siamo nella notte tra il sabato 9 aprile e la domenica 10 aprile dell'anno 1300 (secondo un altro computo, il 26 marzo), ai piedi delle mura roventi della città di <strong>Dite</strong>, il basso Inferno.</p>
+
+  <h4>1. La paura davanti alle mura e il turbamento di Virgilio</h4>
+  <p>Dante impallidisce di terrore vedendo <strong>Virgilio</strong> tornare indietro, respinto dai diavoli che presidiano Dite. Virgilio nasconde il proprio turbamento per non spaventare il discepolo e si mette in ascolto, in attesa di un aiuto promesso. Comincia una frase con un «se non&hellip;» che lascia a metà: proprio quel troncamento angoscia Dante più di quanto farebbe una minaccia esplicita.</p>
+
+  <h4>2. La domanda sul Limbo e il ricordo di Eritone</h4>
+  <p>Dante chiede se sia mai accaduto che un'anima del Limbo scendesse fino in fondo all'Inferno, insinuando il dubbio che Virgilio non conosca davvero la strada. Virgilio lo rassicura raccontando che, subito dopo la morte, fu evocato dalla maga <strong>Eritone</strong>, che lo costrinse a entrare in Dite per strappare uno spirito dalla Giudecca, il punto più basso dell'Inferno. Ne conclude di conoscere bene quel cammino, e spiega che la palude <strong>Stige</strong> cinge l'intera città, rendendo inevitabile uno scontro per entrarvi.</p>
+
+  <h4>3. Le Furie e la minaccia di Medusa</h4>
+  <p>Sulla cima infuocata di una torre appaiono improvvisamente tre figure femminili insanguinate, cinte di serpenti: sono le <strong>Erinni</strong> (Furie), ancelle di Proserpina. Virgilio le nomina una per una:</p>
+  <ul>
+    <li><strong>Megera</strong>, a sinistra;</li>
+    <li><strong>Aletto</strong>, a destra, quella che piange;</li>
+    <li><strong>Tesifone</strong>, al centro.</li>
+  </ul>
+  <p>Le Furie si percuotono il petto gridando e minacciano di far venire <strong>Medusa</strong> per pietrificare Dante, rammaricandosi di non aver punito allo stesso modo <strong>Teseo</strong>, altro vivo disceso agli Inferi. Virgilio, allarmato, volta Dante con le proprie mani e gli copre gli occhi sovrapponendo i propri palmi ai suoi; in questo punto l'autore si rivolge direttamente al lettore, invitandolo a cercare la dottrina nascosta sotto il velo dei versi &mdash; il segno che la sola ragione umana non basta contro certi ostacoli del peccato, ed è necessario l'intervento della Grazia divina.</p>
+
+  <h4>4. L'arrivo del messo celeste</h4>
+  <p>Un fracasso spaventoso, paragonato a un vento impetuoso che abbatte una foresta, scuote le acque dello Stige: è l'arrivo di un <strong>messo celeste</strong>, che attraversa la palude camminando sull'acqua a piedi asciutti, scacciando con la mano sinistra l'aria pestifera. Le anime degli iracondi fuggono davanti a lui come rane davanti a una biscia. Il messo apre la porta di Dite con una piccola verga, senza il minimo sforzo, e rimprovera aspramente i diavoli, ricordando come ogni resistenza al volere divino sia vana; poi se ne va senza rivolgere parola ai due poeti.</p>
+
+  <h4>5. L'ingresso a Dite e il cimitero degli eretici</h4>
+  <p>Liberata la strada, Dante e Virgilio entrano in Dite senza più opposizione, varcando così il confine tra l'Alto e il Basso Inferno. All'interno si apre una vasta spianata disseminata di sepolcri scoperchiati e arroventati dalle fiamme, paragonata alle necropoli di <strong>Arles</strong> e di <strong>Pola</strong>, da cui escono lamenti strazianti. Virgilio spiega a Dante che qui giacciono gli <strong>eresiarchi</strong> con i loro seguaci, ciascuno sepolto insieme a chi condivideva la sua dottrina, in tombe più o meno calde a seconda della gravità dell'eresia commessa.</p>
+
+  <p class="closing">Come il canto precedente, anche questo si interrompe prima della conclusione dell'episodio: i due poeti proseguono in cammino tra i sepolcri infuocati, e il racconto rimanda al canto successivo l'incontro, atteso da Dante fin da questo momento, con il fiorentino <strong>Farinata degli Uberti</strong>.</p>
+</template>
+
+<template id="canto-10">
+  <p>È notte fonda, tra sabato 9 aprile e la domenica successiva dell'anno 1300 (secondo altri, il 26 marzo), anno del Giubileo. Il canto prosegue direttamente l'episodio iniziato nel canto precedente: siamo ancora dentro le mura di Dite, nel sesto cerchio, dove sono puniti gli eretici, in particolare gli epicurei che negarono l'immortalità dell'anima.</p>
+
+  <h4>1. Il cimitero degli eretici</h4>
+  <p>Virgilio e Dante avanzano lungo uno stretto sentiero tra il muro di ferro di Dite e le tombe roventi, deserte di guardiani demoniaci. Dante chiede di poter vedere le anime racchiuse nei sepolcri aperti, e Virgilio gli spiega che quelle arche resteranno spalancate finché, dopo il Giudizio Universale, le anime torneranno dalla valle di Iosafàt a riunirsi ai propri corpi e i sepolcri si sigilleranno per sempre. Qui giace Epicuro con i suoi seguaci. Virgilio rivela poi di aver intuito un desiderio nascosto di Dante: verificare se in questo cerchio sia dannato <strong>Farinata degli Uberti</strong>, di cui Dante aveva già saputo da Ciacco.</p>
+
+  <h4>2. Farinata degli Uberti</h4>
+  <p>Una voce dal fondo di una tomba, riconoscendo la parlata fiorentina di Dante, gli chiede di fermarsi. È <strong>Farinata</strong>, ex capo dei Ghibellini fiorentini, che si erge dal sepolcro visibile solo dal busto in su, con un atteggiamento di sfida verso l'intero Inferno. Spinto da Virgilio ad avvicinarsi, Dante viene interrogato da Farinata sui propri antenati: scoperto che furono nemici della sua fazione, Farinata ricorda di averli cacciati due volte da Firenze, ma Dante ribatte con orgoglio che i suoi seppero sempre tornare, a differenza dei discendenti di Farinata &mdash; un duello verbale tutto politico e fiorentino.</p>
+
+  <h4>3. L'interruzione di Cavalcante</h4>
+  <p>Dalla stessa tomba emerge un'altra anima, sollevata solo fino al mento: è <strong>Cavalcante dei Cavalcanti</strong>, padre di Guido, amico di Dante. Angosciato, chiede perché il figlio non sia lì con Dante, credendo che il viaggio si compia per sola grandezza d'ingegno. Dante risponde con una frase ambigua sul pronome "cui", riferita a Virgilio come guida verso Beatrice che Guido forse disdegnò; Cavalcante fraintende, crede che il figlio sia morto, e davanti all'esitazione di Dante crolla disperato nella tomba, senza più riapparire &mdash; episodio che mostra la sordità spirituale degli epicurei verso la fede e la grazia.</p>
+
+  <h4>4. Il ritorno di Farinata: profezia e Montaperti</h4>
+  <p>Del tutto indifferente al crollo di Cavalcante, Farinata riprende il discorso interrotto: la sconfitta politica della sua famiglia lo tormenta più delle fiamme eterne. Profetizza poi a Dante il proprio esilio da Firenze, che avverrà entro meno di quattro anni. Alla domanda di Farinata sul perché Firenze sia così spietata contro gli Uberti, Dante risponde ricordando la strage di <strong>Montaperti</strong> (1260), dove il fiume Arbia si tinse di sangue guelfo. Farinata ammette la propria responsabilità in quella battaglia, ma rivendica con orgoglio di essere stato l'unico a impedire, in seguito, la distruzione totale di Firenze voluta dagli altri Ghibellini.</p>
+
+  <h4>5. La preveggenza dei dannati</h4>
+  <p>Dante chiede spiegazione di un dubbio: come mai i dannati prevedono il futuro (come ha fatto Farinata) ma ignorano il presente (come Cavalcante, ignaro se il figlio fosse vivo). Farinata chiarisce che essi vedono come chi ha vista da presbite: distinguono solo gli eventi lontani nel tempo, ma sono ciechi al presente, e dopo il Giudizio Universale, chiuso ogni futuro, la loro conoscenza si estinguerà del tutto. Dante, pentito, prega Farinata di informare il padre che Guido è ancora vivo. Prima di andare, apprende che nella stessa tomba giacciono oltre mille dannati, tra cui <strong>Federico II di Svevia</strong> e il cardinale <strong>Ottaviano degli Ubaldini</strong>.</p>
+
+  <h4>6. Il congedo e le parole di Virgilio</h4>
+  <p>Farinata si ricala nella tomba e scompare. Turbato dalla profezia dell'esilio, Dante confida il proprio smarrimento a Virgilio, che lo esorta a ricordare bene quelle parole ostili, promettendogli che sarà <strong>Beatrice</strong>, un giorno, a rivelargli per intero il cammino della sua vita.</p>
+
+  <p class="closing">Il canto si chiude con i due poeti che lasciano le mura di Dite dirigendosi verso il centro del cerchio, mentre comincia a salire un puzzo insopportabile dal settimo cerchio sottostante, quello dei violenti, verso cui sono ormai diretti.</p>
+</template>
+
+<template id="canto-11">
+  <p>È notte fonda, verso le quattro del mattino di un sabato di primavera dell'anno 1300 (tradizionalmente il 9 aprile, secondo altri il 26 marzo), a circa due ore dall'alba. Il canto si svolge sull'orlo tra il sesto e il settimo cerchio: Dante e Virgilio si sono appena lasciati alle spalle la città di Dite, dove sono puniti gli eresiarchi, e sostano prima di scendere tra i violenti.</p>
+
+  <h4>1. La sosta sull'orlo del baratro</h4>
+  <p>Usciti dalle mura roventi di Dite, i due poeti giungono sull'orlo di un'alta parete rocciosa fatta di pietre franate, sopra il vuoto del settimo cerchio. Un tanfo insopportabile che sale dal basso li costringe a fermarsi, riparandosi dietro il coperchio di una tomba. Su di essa Dante legge un'iscrizione che indica sepolto papa Anastasio II, condotto all'eresia dal diacono Fotino.</p>
+
+  <h4>2. Perché fermarsi: una pausa per capire l'Inferno</h4>
+  <p>Virgilio propone di attendere lì finché l'olfatto non si abitui al puzzo, e Dante, impaziente, lo esorta a non sprecare quella sosta forzata. Virgilio coglie l'occasione per spiegare per la prima volta la struttura morale dell'Inferno: introduce il concetto di <strong>malizia</strong>, la volontà cosciente di nuocere, che si realizza tramite violenza o frode. Poiché la frode tradisce l'uso della ragione &mdash; dono specificamente umano &mdash; è più grave della violenza e viene perciò punita più in basso, con pene maggiori.</p>
+
+  <h4>3. Il settimo Cerchio: i violenti</h4>
+  <p>Virgilio descrive il settimo cerchio, diviso in tre gironi concentrici secondo il bersaglio della violenza:</p>
+  <ul>
+    <li>primo girone: violenti contro il prossimo (omicidi, feritori, devastatori di beni altrui);</li>
+    <li>secondo girone: violenti contro se stessi, cioè suicidi e scialacquatori che dissipano i propri beni;</li>
+    <li>terzo girone: violenti contro Dio, distinti in bestemmiatori, sodomiti (che offendono la natura) e usurai (che offendono l'operosità, legati alla città di Cahors, sinonimo medievale di usura).</li>
+  </ul>
+
+  <h4>4. L'ottavo e il nono Cerchio: i fraudolenti e i traditori</h4>
+  <p>Virgilio prosegue illustrando i due modi della frode: contro chi non si fida, punita nell'ottavo cerchio (ipocriti, adulatori, maghi, falsari, simoniaci, ruffiani, barattieri e simili), e contro chi si fida &mdash; il tradimento vero e proprio, il peccato più grave &mdash; punito nel nono e più profondo cerchio, al centro della Terra, dove siede Lucifero.</p>
+
+  <h4>5. Il dubbio di Dante: i peccatori fuori dalle mura</h4>
+  <p>Dante chiede perché i peccatori incontrati prima di Dite (iracondi, lussuriosi, golosi, avari e prodighi) non siano puniti dentro la città, se anche loro sono dannati. Virgilio lo richiama all'Etica Nicomachea di Aristotele, che distingue incontinenza, malizia e matta bestialità: l'incontinenza è la colpa meno grave, e per questo i suoi peccatori scontano pene meno dure fuori dalle mura di Dite.</p>
+
+  <h4>6. La questione dell'usura</h4>
+  <p>Entusiasta di questo chiarimento, Dante chiede a Virgilio di spiegare perché l'usura offenda Dio. Virgilio risponde con un ragionamento in tre passaggi: la natura discende dall'intelletto divino; l'arte e il lavoro umano seguono la natura come un discepolo segue il maestro; e la Genesi insegna che l'uomo deve trarre sostentamento da natura e lavoro. L'usuraio, invece, confida nel denaro che genera denaro anziché nel lavoro onesto, disprezzando così sia la natura sia sua figlia, l'operosità umana.</p>
+
+  <h4>7. La ripresa del cammino</h4>
+  <p>Esaurita la spiegazione, Virgilio invita Dante a rimettersi in marcia, indicando la posizione delle stelle &mdash; i Pesci che sorgono e il Carro verso il Coro &mdash; segno che sono circa le quattro del mattino. Annuncia che il varco per scendere nel settimo cerchio si trova poco più avanti.</p>
+
+  <p class="closing">Il canto, privo di incontri con dannati, funge da pausa esplicativa: attraverso l'espediente narrativo del puzzo, Dante autore traccia la mappa morale dell'Inferno, fondata sulla distinzione aristotelico-teologica tra incontinenza, violenza e frode, in ordine di gravità crescente verso il centro della Terra.</p>
+</template>
+
+<template id="canto-12">
+  <p>È notte fonda, circa le quattro del mattino di un sabato di primavera dell'anno 1300 (tradizionalmente il 9 aprile, secondo altri il 26 marzo). Il canto si svolge nel primo girone del settimo cerchio, dove sono puniti i violenti contro il prossimo &mdash; assassini, feritori, devastatori e predoni &mdash; immersi in un fiume di sangue bollente in proporzione alla gravità della colpa.</p>
+
+  <h4>1. La discesa e la frana</h4>
+  <p>Dante e Virgilio giungono sull'orlo di un precipizio franato che segna il passaggio dal sesto al settimo cerchio: una parete rocciosa spaccata e rovinosa, paragonata da Virgilio a una frana realmente esistente nella valle dell'Adige, presso Trento. Il dirupo, benché impressionante, lascia comunque un varco praticabile per scendere.</p>
+
+  <h4>2. Il Minotauro</h4>
+  <p>Sulla sommità della frana giace il <strong>Minotauro</strong>, mostro per metà uomo e metà toro, simbolo della violenza bestiale che caratterizza l'intero cerchio. Virgilio lo affronta con una provocazione, ricordandogli che non è Teseo &mdash; l'eroe che lo uccise &mdash; a trovarsi davanti a lui, ma un semplice viaggiatore. La rabbia scatenata nel mostro lo fa infuriare a tal punto da perdere il controllo, permettendo ai due poeti di calarsi rapidamente lungo la scarpata mentre le pietre, smosse dal peso reale di Dante vivo, franano sotto i suoi piedi.</p>
+
+  <h4>3. L'origine della frana: il racconto di Virgilio</h4>
+  <p>Durante la discesa Virgilio spiega l'origine del crollo: quando lui stesso vi era già sceso in passato, evocato dalla maga Eritone, la parete era ancora intatta. Fu il terremoto avvenuto al momento della morte di Cristo &mdash; poco prima della sua discesa al Limbo per liberare i patriarchi &mdash; a scuotere l'intero Inferno e a provocare quella frana. Dante commenta con un'amara riflessione sulla cupidigia e l'ira, colpe che spingono al male in vita e tormentano poi in eterno.</p>
+
+  <h4>4. Il fiume di sangue e i centauri: l'incontro con Chirone</h4>
+  <p>Si apre davanti ai due poeti un fiume di sangue bollente a forma d'arco &mdash; il <strong>Flegetonte</strong>, non ancora nominato &mdash; dove sono immersi i violenti contro il prossimo. Lungo l'argine pattugliano a migliaia i <strong>centauri</strong>, armati di arco e frecce, incaricati di colpire le anime che tentano di emergere oltre il consentito. Tre di essi, <strong>Nesso</strong>, <strong>Chirone</strong> e <strong>Folo</strong>, si fanno avanti minacciosi; Chirone, accortosi che Dante è vivo perché smuove le pietre, ottiene conferma da Virgilio, che spiega la natura del viaggio voluto da Beatrice. Chirone assegna quindi Nesso come guida per il tragitto lungo il fiume.</p>
+
+  <h4>5. Il viaggio con Nesso: tiranni, assassini e predoni</h4>
+  <p>Nesso accompagna i due poeti lungo l'argine, indicando le anime secondo la profondità dell'immersione, proporzionale alla gravità della colpa:</p>
+  <ul>
+    <li>sommersi fino alle ciglia, i tiranni: <strong>Alessandro</strong>, <strong>Dionisio di Siracusa</strong>, <strong>Ezzelino da Romano</strong>, <strong>Òbizzo d'Este</strong>;</li>
+    <li>immerso fino alla gola, l'assassino <strong>Guido di Montfort</strong>;</li>
+    <li>con petto e testa fuori dal sangue, predoni e ladroni di strada, non nominati.</li>
+  </ul>
+  <p class="closing">Giunti al punto meno profondo, l'unico guadabile, Nesso rivela che dall'altra parte il fiume si fa via via più profondo, fino al punto dove sono puniti i colpevoli peggiori: <strong>Attila</strong>, <strong>Pirro</strong> e <strong>Sesto</strong>, e i briganti <strong>Rinieri da Corneto</strong> e <strong>Rinieri dei Pazzi</strong>. Compiuto il guado con Dante sulla groppa, Nesso torna al proprio posto tra i centauri, lasciando i due poeti soli sull'altra sponda, pronti a proseguire nel settimo cerchio.</p>
+</template>
+
+<template id="canto-13">
+  <p>È l'alba di sabato 9 aprile 1300 (secondo altri il 26 marzo). Il centauro Nesso non ha ancora ritoccato l'altra sponda del Flegetonte quando Dante e Virgilio si addentrano nel secondo girone del settimo Cerchio, la selva dei violenti contro se stessi: suicidi trasformati in piante contorte, e scialacquatori, che dissiparono i propri beni con la stessa furia con cui i primi distrussero il proprio corpo.</p>
+
+  <h4>1. La selva senza sentiero</h4>
+  <p>Il bosco è più aspro delle macchie selvagge della Maremma: foglie scure, rami nodosi, spine al posto dei frutti. Vi nidificano le <strong>Arpie</strong>, mostri dal volto di donna che nell'<em>Eneide</em> cacciarono i Troiani dalle Strofadi, e i loro lamenti si mescolano a quelli, ancora invisibili, delle anime imprigionate negli alberi.</p>
+
+  <h4>2. Il ramo che sanguina: Pier della Vigna</h4>
+  <p>Su invito di Virgilio, Dante spezza un ramoscello da un grande pruno, e dal tronco ferito escono insieme sangue nero e parole di rimprovero: è <strong>Pier della Vigna</strong>, segretario e confidente di <strong>Federico II di Svevia</strong>, caduto vittima dell'invidia di corte, accusato ingiustamente di tradimento e suicidatosi per sfuggire al disonore &mdash; «ingiusto fece me contra me giusto». Racconta anche come le anime dei suicidi, giunte davanti a Minosse, cadano a caso nella selva e germoglino in pianta, nutrendo col proprio dolore le Arpie che ne divorano le foglie; il giorno del Giudizio recupereranno i corpi ma non potranno rivestirsene, e li vedranno appesi per sempre ai rami che le imprigionano.</p>
+
+  <h4>3. La caccia agli scialacquatori</h4>
+  <p>Un fragore di caccia interrompe il colloquio: due dannati nudi, <strong>Lano da Siena</strong> e <strong>Iacopo da Sant'Andrea</strong>, fuggono inseguiti da nere cagne famelice, che raggiungono e sbranano il secondo, rifugiatosi invano in un cespuglio. Quel cespuglio è a sua volta un'anima, un suicida fiorentino anonimo, che rimprovera Iacopo di essersene servito come schermo e racconta di essersi impiccato in casa propria, nella città che cambiò patrono da Marte a san Giovanni Battista.</p>
+
+  <p class="closing">Un canto costruito con grande raffinatezza stilistica &mdash; fitto di richiami all'<em>Eneide</em> e di figure retoriche elevate &mdash; che stride volutamente con l'orrore descritto: la selva dei suicidi non ha via d'uscita, ed è il rovescio peggiorato della selva oscura del Canto I.</p>
+</template>
+
+<template id="canto-14">
+  <p>Prosegue la stessa alba di sabato 9 aprile 1300. Dante raccoglie pietosamente i rami spezzati del suicida fiorentino, poi lascia con Virgilio la selva dei suicidi per entrare nel terzo girone del settimo Cerchio, un sabbione infuocato dove sono puniti i violenti contro Dio: bestemmiatori (supini), sodomiti (in cammino) e usurai (seduti).</p>
+
+  <h4>1. La pioggia di fuoco</h4>
+  <p>Su una landa arida, paragonata al deserto libico di <strong>Catone l'Uticense</strong>, cade lenta una pioggia di larghe falde infuocate, simile a neve senza vento (un'immagine capovolta da un verso di <strong>Guido Cavalcanti</strong>) e paragonata a una leggendaria pioggia di fuoco vista da <strong>Alessandro Magno</strong> in India. Le anime nude agitano continuamente le mani per scrollarsi il fuoco di dosso, in un contrappasso che richiama la distruzione di Sodoma e Gomorra.</p>
+
+  <h4>2. Capaneo, il bestemmiatore che sfida Dio</h4>
+  <p>Tra i corpi supini, uno resta immobile e sprezzante, indifferente alle fiamme: è <strong>Capaneo</strong>, uno dei sette re che assediarono Tebe, che vanta ancora la propria sfida agli dèi &mdash; «Qual io fui vivo, tal son morto» &mdash; e sostiene che nemmeno Giove, con l'aiuto di Vulcano e dei Ciclopi nella fucina del Mongibello, potrebbe dargli vera soddisfazione colpendolo di nuovo. Virgilio reagisce con una collera mai mostrata prima, spiegandogli che è proprio la sua superbia incrollabile, e non il fuoco, la vera pena che sconta.</p>
+
+  <h4>3. Il Flegetonte e il Veglio di Creta</h4>
+  <p>Giunti al piccolo fiume di sangue che sgorga dalla selva &mdash; il <strong>Flegetonte</strong>, paragonato al Bulicame di Viterbo &mdash; Virgilio lo definisce la cosa più notevole vista finora, perché spegne su di sé ogni fiamma. Racconta allora l'origine di tutti i fiumi infernali: sull'isola di <strong>Creta</strong>, dentro il monte Ida dove Rea nascose il piccolo Giove a Saturno, si erge la statua di un gigantesco <strong>Veglio</strong>, fatto di oro, argento, rame, ferro e terracotta (un'allegoria della storia umana in decadenza), che volge le spalle all'Oriente e guarda Roma: dalle sue fessure colano lacrime che formano Acheronte, Stige, Flegetonte e, sul fondo dell'abisso, il Cocito. Il quarto fiume, il <strong>Lete</strong>, appartiene invece al Paradiso terrestre e Dante lo vedrà solo molto più avanti nel viaggio.</p>
+
+  <p class="closing">Il canto si chiude con l'invito a proseguire lungo gli argini di pietra del Flegetonte, gli unici punti del girone dove il fuoco non può bruciare: sarà proprio su uno di essi che, nel canto successivo, Dante incontrerà Brunetto Latini.</p>
+</template>
+
+<template id="canto-15">
+  <p>Siamo ancora nell'alba di sabato 9 aprile 1300. Dante e Virgilio camminano lungo uno degli argini di pietra del Flegetonte, nel terzo girone del settimo Cerchio, ormai lontani dalla selva dei suicidi, tra le anime dei sodomiti che vi camminano senza sosta sotto la pioggia di fuoco.</p>
+
+  <h4>1. Il riconoscimento di Brunetto Latini</h4>
+  <p>Una schiera di dannati scruta i due viandanti come si guarda qualcuno in una notte senza luna; uno di loro afferra Dante per la veste ed esclama la propria meraviglia. È <strong>Brunetto Latini</strong>, l'antico maestro di retorica del poeta, dal volto ormai bruciato dalle fiamme. Chiede di tornare un poco indietro per parlargli, avvertendolo però che in questo girone fermarsi anche un istante comporta cent'anni senza riparo dal fuoco: i due proseguiranno quindi affiancati, Dante sull'argine a capo chino per rispetto, Brunetto più in basso sul sabbione.</p>
+
+  <h4>2. La profezia dell'esilio</h4>
+  <p>Brunetto predice a Dante gloria letteraria e politica, se saprà seguire la propria stella, ma anche l'ostilità dei <strong>Fiorentini</strong> &mdash; discendenti, secondo la leggenda, dei profughi di Fiesole distrutta dopo la ribellione di Catilina &mdash; che lo perseguiteranno proprio per il suo "ben fare", come già il dolce fico non può fruttare tra i lazzi sorbi. Li descrive come gente avara, invidiosa e superba (gli stessi vizi già denunciati da Ciacco), e augura che le "bestie fiesolane" si distruggano a vicenda risparmiando i pochi eredi del sangue romano puro. Dante replica con gratitudine per l'antico insegnamento e si dichiara pronto ai colpi della Fortuna, come il contadino della leggenda popolare gira la propria zappa; Virgilio approva in silenzio: «Bene ascolta chi la nota».</p>
+
+  <h4>3. I compagni di pena e il commiato</h4>
+  <p>Interrogato sui propri compagni, Brunetto nomina il grammatico <strong>Prisciano</strong>, il giurista <strong>Francesco d'Accorso</strong> e il vescovo <strong>Andrea de' Mozzi</strong>, trasferito da Bonifacio VIII da Firenze a Vicenza. Vedendo il fumo di una nuova schiera avvicinarsi, si congeda in fretta raccomandando a Dante il proprio <em>Trésor</em>, l'enciclopedia da lui composta, e corre via, paragonato non a chi perde ma a chi vince il palio di Verona.</p>
+
+  <p class="closing">Il rapporto tra Dante e Brunetto resta segnato da un contrasto scoperto: l'affetto e la deferenza verso il maestro convivono con la sua condanna, segno che fama e meriti terreni non bastano a evitare la giustizia divina.</p>
+</template>
+
+<script>
+(function(){
+  var CANTI = {
+    "canto-1":  { num: "I",    title: "La selva oscura",            period: "Notte tra il 7 e l'8 aprile 1300", circle: "Fuori dai cerchi · la selva e il colle", accent: "#c99a46" },
+    "canto-2":  { num: "II",   title: "Le tre donne benedette",      period: "Sera dell'8 aprile 1300, al crepuscolo", circle: "Preludio · soglia dell'Inferno", accent: "#c99a46" },
+    "canto-3":  { num: "III",  title: "La porta dell'Inferno",       period: "Sera dell'8 aprile 1300, Venerdì Santo", circle: "Antinferno · Vestibolo degli Ignavi", accent: "#c99a46" },
+    "canto-4":  { num: "IV",   title: "Il Limbo dei virtuosi",       period: "Notte dell'8 aprile 1300, dopo lo svenimento", circle: "Cerchio I · Limbo", accent: "#c99a46" },
+    "canto-5":  { num: "V",    title: "Paolo e Francesca",           period: "Notte dell'8 aprile 1300", circle: "Cerchio II · Lussuriosi", accent: "#c99a46" },
+    "canto-6":  { num: "VI",   title: "Cerbero e Ciacco",            period: "Notte tra l'8 e il 9 aprile 1300", circle: "Cerchio III · Golosi", accent: "#c99a46" },
+    "canto-7":  { num: "VII",  title: "La ruota della Fortuna",      period: "Poco dopo la mezzanotte, 9 aprile 1300", circle: "Cerchio IV → V · Avari/Prodighi, Iracondi/Accidiosi", accent: "#c99a46" },
+    "canto-8":  { num: "VIII", title: "Le porte di Dite",            period: "Notte del 9 aprile 1300", circle: "Cerchio V · Iracondi, sino alle mura di Dite", accent: "#c99a46" },
+    "canto-9":  { num: "IX",   title: "Il messo del cielo",          period: "Notte tra il 9 e il 10 aprile 1300", circle: "Cerchio VI · ingresso a Dite, Eresiarchi", accent: "#c99a46" },
+    "canto-10": { num: "X",    title: "Farinata e Cavalcante",       period: "Notte fonda, tra il 9 e il 10 aprile 1300", circle: "Cerchio VI · Eresiarchi", accent: "#c99a46" },
+    "canto-11": { num: "XI",   title: "La mappa del male",           period: "Verso le quattro del mattino, 9 aprile 1300", circle: "Soglia tra Cerchio VI e VII", accent: "#c99a46" },
+    "canto-12": { num: "XII",  title: "Il fiume di sangue",          period: "Verso le quattro del mattino, 9 aprile 1300", circle: "Cerchio VII, girone 1 · Violenti contro il prossimo", accent: "#c99a46" },
+    "canto-13": { num: "XIII", title: "La selva dei suicidi",        period: "Alba di sabato 9 aprile 1300", circle: "Cerchio VII, girone 2 · Violenti contro se stessi (suicidi e scialacquatori)", accent: "#c99a46" },
+    "canto-14": { num: "XIV",  title: "Capaneo e il Veglio di Creta", period: "Mattina di sabato 9 aprile 1300", circle: "Cerchio VII, girone 3 · Violenti contro Dio (bestemmiatori)", accent: "#c99a46" },
+    "canto-15": { num: "XV",   title: "Brunetto Latini",             period: "Mattina inoltrata di sabato 9 aprile 1300", circle: "Cerchio VII, girone 3 · Violenti contro Dio (sodomiti)", accent: "#c99a46" }
+  };
+
+  var overlay = document.getElementById("modalOverlay");
+  var modalBody = document.getElementById("modalBody");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalPeriod = document.getElementById("modalPeriod");
+  var modalCircle = document.getElementById("modalCircle");
+  var modalEl = overlay.querySelector(".modal");
+  var lastFocused = null;
+
+  function openCanto(id){
+    var data = CANTI[id];
+    var tpl = document.getElementById(id);
+    if(!data || !tpl) return;
+    lastFocused = document.activeElement;
+    modalTitle.innerHTML = '<span class="num">' + data.num + '</span>' + data.title;
+    modalPeriod.textContent = data.period;
+    modalCircle.textContent = data.circle;
+    modalEl.style.setProperty("--modal-accent", data.accent);
+    modalBody.innerHTML = "";
+    modalBody.appendChild(tpl.content.cloneNode(true));
+    overlay.classList.add("open");
+    document.body.classList.add("modal-locked");
+    modalEl.scrollTop = 0;
+    document.getElementById("modalClose").focus();
+  }
+
+  function closeModal(){
+    overlay.classList.remove("open");
+    document.body.classList.remove("modal-locked");
+    if(lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  document.querySelectorAll("[data-target]").forEach(function(el){
+    el.addEventListener("click", function(){ openCanto(el.getAttribute("data-target")); });
+  });
+
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+  overlay.addEventListener("click", function(e){ if(e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+  });
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var nodes = document.querySelectorAll(".node");
+  if(reduceMotion || !("IntersectionObserver" in window)){
+    nodes.forEach(function(n){ n.classList.add("visible"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("visible");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+    nodes.forEach(function(n){ io.observe(n); });
+  }
+})();
+</script>

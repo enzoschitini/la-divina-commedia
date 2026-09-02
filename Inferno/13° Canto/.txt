@@ -1,0 +1,68 @@
+Voglio che tu faccia una skill per generare in automatico a partire da um txt il file md con i commenti dei canti. Io ti mando un file txt con 
+il contenuto completo e crudo del canto e tu attraverso la skill fai il file md. Il file deve seguire la stessa strutura del "Inferno, Canto XIII.md"
+però con il contenuto adatto al canto.
+
+Una cosa che magari ti può servire per creare la skill sono i prompt che ho usato per creare il mio md:
+
+## 1. Generare la spiegazione dei canti
+
+```jsx
+Ogni volta che ti invio il testo di un canto della Divina Commedia (con eventuali spiegazioni, note o commenti allegati), leggi attentamente TUTTO il contenuto del testo che ti fornisco prima di rispondere.
+
+Successivamente, raccontami il canto come se fosse la scena di un film o di una serie TV, in modo che io possa "vedere" ogni evento con gli occhi. Però non fare riferimento al mezzo stesso: non dire "il film...", "la telecamera...", "la scena si apre..." o espressioni simili. Descrivi direttamente ciò che accade.
+
+**Regole fondamentali:**
+
+- Non fare un riassunto scolastico.
+- Non dare per scontato che io conosca la Divina Commedia.
+- Racconta tutto in ordine cronologico, senza saltare nessun avvenimento.
+- Inserisci TUTTI i fatti presenti nel testo che ti fornisco (canto, spiegazioni, note e commenti inclusi). Non deve mancare nessun dettaglio importante.
+- Se il testo specifica il periodo dell'anno, il giorno, l'ora, il momento della giornata, il luogo, la stagione o altri riferimenti temporali, inseriscili naturalmente nella narrazione.
+- Descrivi l'ambiente in modo visivo: luci, colori, paesaggio, rumori, atmosfera, espressioni dei personaggi, movimenti, emozioni e tutto ciò che aiuta a visualizzare la scena.
+- Spiega cosa pensa e prova Dante in ogni momento e perché prende ogni decisione.
+- Quando compare un nuovo personaggio, spiegami subito chi è e perché è importante.
+- Se un oggetto, un animale, un luogo o un evento ha un significato simbolico, racconta prima ciò che accade realmente e solo dopo spiega il significato simbolico in modo semplice.
+- Se Dante cita un episodio del passato o racconta qualcosa accaduto prima dell'inizio del canto, inseriscilo nella narrazione spiegando chiaramente che si tratta di un ricordo o di un racconto.
+- Non omettere nemmeno i piccoli dettagli se sono presenti nel testo.
+- Se ci sono dialoghi importanti, raccontami anche il loro contenuto spiegando chi parla, a chi si rivolge e cosa vuole comunicare.
+- Mantieni uno stile narrativo coinvolgente, come quello di un romanzo o di una sceneggiatura, ma senza inventare eventi non presenti nel testo che ti fornisco.
+- Se il testo contiene informazioni aggiuntive (contesto storico, allegorie, spiegazioni o interpretazioni), integrale nella narrazione nel punto più adatto, senza creare una sezione separata.
+- Basati ESCLUSIVAMENTE sul testo che ti invio. Se qualcosa non è specificato in quel testo, non inventarlo. Se si tratta di un'informazione generalmente accettata dagli studiosi, puoi comunque aggiungerla, ma specificando chiaramente che si tratta di una ricostruzione o di una tradizione interpretativa esterna al testo fornito.
+
+L'obiettivo è che, dopo aver letto il tuo racconto, io abbia la sensazione di aver visto l'intero canto come un film, senza aver perso nessun dettaglio importante.
+
+Testo di base:
+[QUI INCOLLERAI IL TESTO DEL CANTO]
+```
+
+## 2. Generare il titolo
+
+```jsx
+Crea un titolo per il canto, ecco alcuni esempi dei titoli scelti per i primi 7 canti:
+
+1 - Lo smarrimento e la selva oscura
+2 - I dubbi di Dante e la missione di Virgilio
+3 - La porta dell'Inferno
+4 - La luce nel buio eterno
+5 - L'incontro con Paolo e Francesca
+6 - Firenze nel fango - Cerbero e i golosi: la profezia di Ciacco su Firenze
+7 - **Pluto, gli avari e i prodighi, la ruota della Fortuna**
+```
+
+## 3. Generare il riassunto
+
+Ti allego la spiegazione discorsiva del Canto [NUMERO] dell'Inferno di Dante. Voglio che tu ne produca un riassunto degli avvenimenti principali, seguendo esattamente questo formato:
+
+1. Apri con una frase tipo "Ecco i principali avvenimenti del Canto [NUMERO] dell'Inferno:"
+2. Subito dopo, prima della prima sezione numerata, inserisci un breve paragrafo introduttivo (senza titolo in grassetto) che indichi: il momento del viaggio in cui ci troviamo (tempo narrativo, giorno/notte, eventuale data), il cerchio infernale in cui si svolge il canto, chi vi è punito e per quale colpa. Se il canto si svolge a cavallo tra due cerchi o prosegue un episodio iniziato nel canto precedente, specificalo.
+3. Dividi il resto del riassunto in sezioni numerate (**1.**, **2.**, **3.**...), una per ogni episodio o blocco narrativo del canto (es. l'incontro con un mostro/demone, l'attraversamento di un luogo, il dialogo con un dannato, una digressione dottrinale/filosofica, ecc.), nello stesso ordine in cui compaiono nel testo.
+4. Dai a ogni sezione un titolo breve in grassetto che descriva l'episodio (es. "**L'incontro con Pluto**").
+5. Sotto ogni titolo scrivi 2-5 frasi in prosa scorrevole che riassumano cosa succede, includendo: chi è coinvolto, cosa accade concretamente, e il significato o simbolismo se rilevante (contrappasso, allegoria, riferimento storico/politico/dottrinale).
+6. Se in una sezione ci sono più elementi elencabili (es. più domande poste, più dannati nominati, più profezie), usa un elenco puntato dentro quella sezione.
+7. Mantieni un tono narrativo-esplicativo, non troppo tecnico né troppo scarno: deve leggersi come una sintesi chiara per chi ha già letto la spiegazione estesa ma vuole un ripasso rapido.
+8. Chiudi, se pertinente, con un accenno a come il canto si collega al successivo (gancio narrativo finale) o con un breve cenno al senso complessivo del canto, solo se il testo originale lo suggerisce chiaramente.
+9. Non aggiungere informazioni che non siano presenti nel testo che ti ho fornito.
+10. Non usare markdown eccessivo (niente tabelle, niente citazioni testuali lunghe): solo grassetto per i titoli di sezione e per i nomi propri più importanti alla prima menzione.
+
+Però usali solo se ti serve o anche come contesto per capire cosa volgio. Alla fine assicurati che la skill sarà in grado di creare un md
+seguendo la stessa struttura del file "Inferno, Canto XIII.md"
