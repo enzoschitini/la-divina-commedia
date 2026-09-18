@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Divina Commedia</title>
+<style>
+  :root{
+    --bg-top: #e9dfc4;
+    --bg-mid: #dcc79c;
+    --bg-bottom: #caa878;
+    --ink: #2b2118;
+    --ink-soft: #4a3c2c;
+    --ember: #8a2c1f;
+    --gold: #93701f;
+    --line: #b8a074;
+    --card-bg: #f4ead4;
+    --card-border: #c9b48b;
+    --hero-veil: rgba(43,33,24,0.06);
+    --shadow: rgba(43,33,24,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-top: #201a2e;
+      --bg-mid: #33221f;
+      --bg-bottom: #180a08;
+      --ink: #ecdfc5;
+      --ink-soft: #cbb99e;
+      --ember: #e2664c;
+      --gold: #d9ad5c;
+      --line: #6b5636;
+      --card-bg: #241a15;
+      --card-border: #4a382a;
+      --hero-veil: rgba(0,0,0,0.25);
+      --shadow: rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-top: #201a2e;
+    --bg-mid: #33221f;
+    --bg-bottom: #180a08;
+    --ink: #ecdfc5;
+    --ink-soft: #cbb99e;
+    --ember: #e2664c;
+    --gold: #d9ad5c;
+    --line: #6b5636;
+    --card-bg: #241a15;
+    --card-border: #4a382a;
+    --hero-veil: rgba(0,0,0,0.25);
+    --shadow: rgba(0,0,0,0.55);
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, var(--hero-veil), transparent 60%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bottom) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h1{
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    text-wrap: balance;
+    font-weight: 600;
+  }
+
+  a{ color: inherit; text-decoration: none; }
+
+  .hero{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 6.5rem 1.75rem 5rem;
+    text-align: center;
+  }
+  .hero .eyebrow{
+    display: inline-block;
+    font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 1.4rem;
+    opacity: 0.9;
+  }
+  .hero h1{
+    font-size: clamp(2.2rem, 5vw, 3.3rem);
+    margin: 0 0 1.1rem;
+    letter-spacing: 0.01em;
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--ember);
+  }
+  .hero p.lead{
+    max-width: 56ch;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+  .hero .verse{
+    margin-top: 2.2rem;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    opacity: 0.85;
+  }
+
+  section.link-card{
+    margin-top: 3rem;
+  }
+  section.link-card a.card{
+    display: inline-block;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 1.6rem 2.2rem;
+    box-shadow: 0 4px 14px var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  section.link-card a.card:hover,
+  section.link-card a.card:focus-visible{
+    transform: translateY(-2px);
+    border-color: var(--ember);
+    box-shadow: 0 10px 22px var(--shadow);
+    outline: none;
+  }
+  section.link-card .card .label{
+    display: block;
+    font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 0.5rem;
+  }
+  section.link-card .card h2{
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+    color: var(--ink);
+  }
+  section.link-card .card p{
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  section.link-card .card .go{
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <span class="eyebrow">Dante Alighieri</span>
+    <h1>La Divina <em>Commedia</em></h1>
+    <p class="lead">Un archivio personale del viaggio di Dante attraverso Inferno, Purgatorio e Paradiso: testi, parafrasi e riassunti canto per canto.</p>
+    <p class="verse">&laquo;Nel mezzo del cammin di nostra vita&nbsp;/ mi ritrovai per una selva oscura&hellip;&raquo;</p>
+
+    <section class="link-card">
+      <a class="card" href="Riassunto dei canti/I Cerchi dell'Inferno.html">
+        <span class="label">Inferno &middot; Canti I&ndash;XVI</span>
+        <h2>I Cerchi dell'Inferno</h2>
+        <p>Una linea del tempo interattiva del viaggio di Dante, dalla selva oscura all'orlo dell'alto burrato.</p>
+        <span class="go">Apri la timeline &rarr;</span>
+      </a>
+    </section>
+  </div>
+</body>
+</html>
